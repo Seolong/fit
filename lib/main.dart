@@ -1,8 +1,16 @@
+import 'package:fit/data/data_source/local/entity/cloth/bottom_entity.dart';
+import 'package:fit/data/data_source/local/entity/cloth/other_entity.dart';
+import 'package:fit/data/data_source/local/entity/cloth/outer_entity.dart';
+import 'package:fit/data/data_source/local/entity/cloth/top_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   await Hive.initFlutter();
+  Hive.registerAdapter(TopEntityAdapter());
+  Hive.registerAdapter(BottomEntityAdapter());
+  Hive.registerAdapter(OuterEntityAdapter());
+  Hive.registerAdapter(OtherEntityAdapter());
   runApp(const MyApp());
 }
 

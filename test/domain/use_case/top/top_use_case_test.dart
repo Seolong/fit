@@ -1,7 +1,6 @@
-import 'package:fit/domain/model/top.dart';
-import 'package:fit/domain/repository/top_repository.dart';
-import 'package:fit/domain/use_case/top/get_all_tops.dart';
-import 'package:fit/domain/use_case/top/get_top_by_id.dart';
+import 'package:fit/domain/model/cloth/top.dart';
+import 'package:fit/domain/repository/cloth/top_repository.dart';
+import 'package:fit/domain/use_case/cloth/top/get_all_tops.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -12,7 +11,7 @@ import 'top_use_case_test.mocks.dart';
 void main() {
   test('check TopRepository works well', () async {
     final repository = MockTopRepository();
-    final getTopById = GetTopById(repository);
+    //final getTopById = GetTopById(repository);
     final getAllTops = GetAllTops(repository);
 
     when(repository.getAllTops()).thenAnswer((_) async => [

@@ -5,8 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
 
-import 'package:fit/domain/model/top.dart' as _i2;
-import 'package:fit/domain/repository/top_repository.dart' as _i3;
+import 'package:fit/domain/model/cloth/top.dart' as _i2;
+import 'package:fit/domain/repository/cloth/top_repository.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
