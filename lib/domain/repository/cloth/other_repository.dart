@@ -10,4 +10,6 @@ abstract class OtherRepository{
   Future<void> deleteOther(Other other);
 
   Future<void> updateOther(Other other);
+
+  Future<void> resetOtherTable();
 }

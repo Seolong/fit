@@ -1,8 +1,10 @@
 import 'package:fit/data/data_source/local/entity/cloth/bottom_entity.dart';
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class BottomDao {
-    final String tableName = 'bottom';
+    final String tableName = 'bottom.db';
 
     Future<BottomEntity?> getBottomEntityById(int id) async {
         final box = await Hive.openBox<BottomEntity>(tableName);

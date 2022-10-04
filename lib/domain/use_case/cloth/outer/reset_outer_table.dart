@@ -3,12 +3,12 @@ import '../../../repository/cloth/outer_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class DeleteOuter {
+class ResetOuterTable {
   final OuterRepository outerRepository;
 
-  DeleteOuter(this.outerRepository);
+  ResetOuterTable(this.outerRepository);
 
   Future<void> call(Outer outer) async {
-    await outerRepository.deleteOuter(outer);
+    await outerRepository.resetOuterTable();
   }
 }

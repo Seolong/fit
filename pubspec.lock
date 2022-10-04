@@ -227,7 +227,7 @@ packages:
     source: hosted
     version: "2.1.3"
   get_it:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: get_it
       url: "https://pub.dartlang.org"
@@ -296,6 +296,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.3"
+  injectable_generator:
+    dependency: "direct main"
+    description:
+      name: injectable_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.4"
   io:
     dependency: transitive
     description:
@@ -395,7 +402,7 @@ packages:
     source: hosted
     version: "1.8.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"

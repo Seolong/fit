@@ -1,8 +1,10 @@
 import 'package:fit/data/data_source/local/entity/cloth/other_entity.dart';
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class OtherDao {
-    final String tableName = 'other';
+    final String tableName = 'other.db';
 
     Future<OtherEntity?> getOtherEntityById(int id) async {
         final box = await Hive.openBox<OtherEntity>(tableName);

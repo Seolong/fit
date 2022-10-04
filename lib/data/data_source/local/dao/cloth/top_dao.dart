@@ -1,8 +1,10 @@
 import 'package:fit/data/data_source/local/entity/cloth/top_entity.dart';
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class TopDao {
-  final String tableName = 'top';
+  final String tableName = 'top.db';
 
   Future<TopEntity?> getTopEntityById(int id) async {
     final box = await Hive.openBox<TopEntity>(tableName);

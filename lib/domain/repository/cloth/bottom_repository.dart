@@ -10,4 +10,6 @@ abstract class BottomRepository{
   Future<void> deleteBottom(Bottom bottom);
 
   Future<void> updateBottom(Bottom bottom);
+
+  Future<void> resetBottomTable();
 }

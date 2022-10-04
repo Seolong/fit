@@ -1,7 +1,9 @@
 import 'package:fit/data/data_source/local/entity/category/cloth_category_entity.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class ClothCategoryDao {
   final String tableName = 'clothCategory';
 
@@ -50,7 +52,7 @@ class ClothCategoryDao {
   Future insertClothCategoryEntity(
       ClothCategoryEntity clothCategoryEntity) async {
     final box = await Hive.openBox<ClothCategoryEntity>(tableName);
-    await box.put(clothCategoryEntity.key, clothCategoryEntity);
+    await box.put(clothCategoryEntity.id, clothCategoryEntity);
   }
 
   Future deleteClothCategoryEntity(

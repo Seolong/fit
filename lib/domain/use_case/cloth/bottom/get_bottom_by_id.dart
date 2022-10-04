@@ -1,7 +1,9 @@
 import 'package:fit/domain/repository/cloth/bottom_repository.dart';
 
 import '../../../model/cloth/bottom.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class GetBottomById{
   final BottomRepository bottomRepository;
 

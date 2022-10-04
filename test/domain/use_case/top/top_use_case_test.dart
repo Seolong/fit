@@ -1,3 +1,4 @@
+import 'package:fit/data/repository/cloth/top_repository_impl.dart';
 import 'package:fit/domain/model/cloth/top.dart';
 import 'package:fit/domain/repository/cloth/top_repository.dart';
 import 'package:fit/domain/use_case/cloth/top/get_all_tops.dart';
@@ -13,6 +14,7 @@ void main() {
     final repository = MockTopRepository();
     //final getTopById = GetTopById(repository);
     final getAllTops = GetAllTops(repository);
+
 
     when(repository.getAllTops()).thenAnswer((_) async => [
           Top(

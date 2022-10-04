@@ -10,4 +10,6 @@ abstract class OuterRepository{
   Future<void> deleteOuter(Outer outer);
 
   Future<void> updateOuter(Outer outer);
+
+  Future<void> resetOuterTable();
 }

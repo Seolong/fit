@@ -10,4 +10,6 @@ abstract class TopRepository{
   Future<void> deleteTop(Top top);
 
   Future<void> updateTop(Top top);
+
+  Future<void> resetTopTable();
 }

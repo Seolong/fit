@@ -3,12 +3,12 @@ import '../../../repository/cloth/other_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class UpdateOther {
+class ResetOtherTable {
   final OtherRepository otherRepository;
 
-  UpdateOther(this.otherRepository);
+  ResetOtherTable(this.otherRepository);
 
   Future<void> call(Other other) async {
-    await otherRepository.updateOther(other);
+    await otherRepository.resetOtherTable();
   }
 }
