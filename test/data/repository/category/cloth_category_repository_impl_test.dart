@@ -21,11 +21,18 @@ void main(){
     repository.insertClothCategory(ClothCategory(id: 0, type: ClothType.top, title: 'title'));
     final category = await repository.getClothCategoryById(0);
     expect(category.type, ClothType.top);
-    //final list = await repository.getAllClothCategories();
-    //repository.insertClothCategory(ClothCategory(id: 1, type: ClothType.top, title: 'title2'));
-    //expect(list.length, 1);
-    await repository.resetClothCategoryTable();
+
+    final cate = category.copyWith(type: ClothType.outer);
+    repository.updateClothCategory(cate);
+    final category2 = await repository.getClothCategoryById(0);
+    expect(category2.type, ClothType.outer);
+
+    repository.deleteClothCategory(category);
     final list = await repository.getAllClothCategories();
+    //repository.insertClothCategory(ClothCategory(id: 1, type: ClothType.top, title: 'title2'));
     expect(list.length, 0);
+    await repository.resetClothCategoryTable();
+    final list1 = await repository.getAllClothCategories();
+    expect(list1.length, 0);
   });
 }

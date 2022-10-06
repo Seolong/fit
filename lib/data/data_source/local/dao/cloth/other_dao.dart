@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class OtherDao {
-    final String tableName = 'other.db';
+    final String tableName = 'other';
 
     Future<OtherEntity?> getOtherEntityById(int id) async {
         final box = await Hive.openBox<OtherEntity>(tableName);
@@ -22,11 +22,16 @@ class OtherDao {
     }
 
     Future deleteOtherEntity(OtherEntity otherEntity) async {
-        await otherEntity.delete();
+        final box = await Hive.openBox<OtherEntity>(tableName);
+        await box.delete(otherEntity.id);
     }
 
     Future updateOtherEntity(OtherEntity otherEntity) async {
-        await otherEntity.save();
+        final box = await Hive.openBox<OtherEntity>(tableName);
+        assert(box.get(otherEntity.id) != null,
+        'OtherDao: DB has no item whose id is ${otherEntity.id}.');
+
+        await box.put(otherEntity.id, otherEntity);
     }
 
     Future resetOtherEntityTable() async {

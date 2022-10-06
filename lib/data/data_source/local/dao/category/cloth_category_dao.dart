@@ -57,12 +57,17 @@ class ClothCategoryDao {
 
   Future deleteClothCategoryEntity(
       ClothCategoryEntity clothCategoryEntity) async {
-    await clothCategoryEntity.delete();
+    final box = await Hive.openBox<ClothCategoryEntity>(tableName);
+    await box.delete(clothCategoryEntity.id);
   }
 
   Future updateClothCategoryEntity(
       ClothCategoryEntity clothCategoryEntity) async {
-    await clothCategoryEntity.save();
+    final box = await Hive.openBox<ClothCategoryEntity>(tableName);
+    assert(box.get(clothCategoryEntity.id) != null,
+    'ClothCategoryDao: DB has no item whose id is ${clothCategoryEntity.id}.');
+
+    await box.put(clothCategoryEntity.id, clothCategoryEntity);
   }
 
   Future resetClothCategoryEntityTable() async {
