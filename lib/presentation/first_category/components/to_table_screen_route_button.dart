@@ -4,12 +4,15 @@ class ToTableScreenRouteButton extends StatefulWidget {
   final double width;
   final double height;
   final Widget child;
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   const ToTableScreenRouteButton({
     Key? key,
-    this.width = 125,
-    this.height = 100,
+    this.width = 150,
+    this.height = 125,
     required this.child,
+    required this.onTap, required this.onLongPress,
   }) : super(key: key);
 
   @override
@@ -19,7 +22,7 @@ class ToTableScreenRouteButton extends StatefulWidget {
 
 class _ToTableScreenRouteButtonState extends State<ToTableScreenRouteButton> {
   final Color _notPressedBackgroundColor = Colors.white;
-  final Color _pressedBackgroundColor = Colors.grey;
+  final Color _pressedBackgroundColor = Colors.grey[300]!;
   late Color backgroundColor;
 
   @override
@@ -31,8 +34,33 @@ class _ToTableScreenRouteButtonState extends State<ToTableScreenRouteButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
-      onLongPress: () {},
+      onTapDown: (_) {
+        setState(() {
+          backgroundColor = _pressedBackgroundColor;
+        });
+      },
+      onTapUp: (_) {
+        setState(() {
+          backgroundColor = _notPressedBackgroundColor;
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          backgroundColor = _notPressedBackgroundColor;
+        });
+      },
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+      onLongPressEnd: (_) {
+        setState(() {
+          backgroundColor = _notPressedBackgroundColor;
+        });
+      },
+      onLongPressCancel: () {
+        setState(() {
+          backgroundColor = _notPressedBackgroundColor;
+        });
+      },
       child: Container(
         width: widget.width,
         height: widget.height,

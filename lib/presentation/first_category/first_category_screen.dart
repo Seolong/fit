@@ -2,6 +2,7 @@ import 'package:fit/presentation/first_category/components/add_category_dialog.d
 import 'package:fit/presentation/first_category/components/to_table_screen_route_button.dart';
 import 'package:fit/presentation/first_category/first_category_view_model.dart';
 import 'package:fit/util/type/cloth_type.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -67,23 +68,92 @@ class FirstCategoryScreen extends StatelessWidget {
               body: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50),
                 child: Consumer<FirstCategoryViewModel>(
-                  builder: (context, provider, child) => ListView.separated(
+                  builder: (context, provider, child) => GridView.builder(
                     itemCount: provider.categories.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Center(
                         child: ToTableScreenRouteButton(
+                          onTap: () {},
+                          onLongPress: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return _getLongPressDialog(
+                                    context, provider, index);
+                              },
+                            );
+                          },
                           child: Text(provider.categories[index].title),
                         ),
                       );
                     },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: 50,);
-                    },
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200),
                   ),
                 ),
               ),
             ),
           );
         });
+  }
+
+  AlertDialog _getLongPressDialog(
+      BuildContext context, FirstCategoryViewModel provider, int index) {
+    return AlertDialog(
+      content: Row(
+        children: [
+          CupertinoButton(child: Text('이름 수정'), onPressed: () {}),
+          CupertinoButton(
+              child: Text('삭제'),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return _getDeleteDialog(context, provider, index);
+                    });
+              }),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('닫기'),
+        ),
+      ],
+    );
+  }
+
+  AlertDialog _getDeleteDialog(
+      BuildContext context, FirstCategoryViewModel provider, int index) {
+    return AlertDialog(
+      content: Text(
+          '${provider.categories[index].title} 내부의 데이터도 같이 삭제됩니다. 삭제하시겠습니까?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            '취소',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            provider.deleteClothCategory(provider.categories[index]);
+            // TODO: 내부 데이터도 싹 다 삭제
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            '삭제',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      ],
+    );
   }
 }

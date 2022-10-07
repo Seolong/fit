@@ -55,7 +55,12 @@ class FirstCategoryViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future addClothCategory(ClothType clothType, String title) async {
+  /// If this method works normally, it will return true.
+  Future<bool> addClothCategory(ClothType clothType, String title) async {
+    if(categories.any((e) => e.title == title && e.type == clothType)){
+      return false;
+    }
+
     int id = await getNewCategoryIdUseCase();
     ClothCategory category = ClothCategory(
       id: id,
@@ -67,6 +72,7 @@ class FirstCategoryViewModel with ChangeNotifier {
     categories.add(category);
 
     notifyListeners();
+    return true;
   }
 
   Future deleteClothCategory(ClothCategory category) async {
