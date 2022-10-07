@@ -13,9 +13,13 @@ class ClothCategoryEntity extends HiveObject {
   @HiveField(2)
   String title;
 
+  @HiveField(3)
+  int order;
+
   ClothCategoryEntity({
     required this.id,
     required this.type,
     required this.title,
+    required this.order,
   });
 }

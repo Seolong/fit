@@ -9,13 +9,13 @@ void main() {
     ClothCategory clothCategory = ClothCategory(
       id: 0,
       type: ClothType.top,
-      title: 'title',
+      title: 'title', order: 0,
     );
 
     ClothCategoryEntity clothCategoryEntity = ClothCategoryEntity(
       id: 1,
       type: 'bottom',
-      title: 'title2',
+      title: 'title2', order: 1,
     );
 
     expect(clothCategory.toClothCategoryEntity().type, 'top');

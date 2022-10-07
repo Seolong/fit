@@ -14,6 +14,7 @@ class Outer with _$Outer {
       required double shoulderWidth,
       required double chestWidth,
       required double sleeveLength,
+      required int order,
     }) = _Outer;
 
     factory Outer.fromJson(Map<String, dynamic> json) => _$OuterFromJson(json);

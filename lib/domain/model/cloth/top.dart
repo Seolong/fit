@@ -14,6 +14,7 @@ class Top with _$Top {
     required double shoulderWidth,
     required double chestWidth,
     required double sleeveLength,
+    required int order,
   }) = _Top;
 
   factory Top.fromJson(Map<String, dynamic> json) => _$TopFromJson(json);

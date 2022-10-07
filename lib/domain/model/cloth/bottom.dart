@@ -14,6 +14,7 @@ class Bottom with _$Bottom {
       required double thigh,
       required double legOpening,
       required double rise,
+      required int order,
     }) = _Bottom;
 
     factory Bottom.fromJson(Map<String, dynamic> json) => _$BottomFromJson(json);

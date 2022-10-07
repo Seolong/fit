@@ -1,8 +1,10 @@
+import 'package:fit/data/data_source/local/entity/category/cloth_category_entity.dart';
 import 'package:fit/data/data_source/local/entity/cloth/bottom_entity.dart';
 import 'package:fit/data/data_source/local/entity/cloth/other_entity.dart';
 import 'package:fit/data/data_source/local/entity/cloth/outer_entity.dart';
 import 'package:fit/data/data_source/local/entity/cloth/top_entity.dart';
 import 'package:fit/di/di_setup.dart';
+import 'package:fit/domain/model/util/count_set.dart';
 import 'package:fit/presentation/first_category/first_category_screen.dart';
 import 'package:fit/presentation/home/home_screen.dart';
 import 'package:fit/util/colors.dart';
@@ -19,6 +21,8 @@ void main() async {
   Hive.registerAdapter(BottomEntityAdapter());
   Hive.registerAdapter(OuterEntityAdapter());
   Hive.registerAdapter(OtherEntityAdapter());
+  Hive.registerAdapter(ClothCategoryEntityAdapter());
+  Hive.registerAdapter(CountSetAdapter());
   runApp(MyApp());
 }
 

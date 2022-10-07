@@ -10,6 +10,7 @@ class Other with _$Other {
       required int categoryId,
       required String name,
       required String details,
+      required int order,
     }) = _Other;
 
     factory Other.fromJson(Map<String, dynamic> json) => _$OtherFromJson(json);

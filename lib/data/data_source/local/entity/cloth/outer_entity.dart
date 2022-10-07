@@ -25,6 +25,9 @@ class OuterEntity extends HiveObject {
   @HiveField(6)
   double sleeveLength;
 
+  @HiveField(7)
+  int order;
+
   OuterEntity({
     required this.id,
     required this.categoryId,
@@ -33,5 +36,6 @@ class OuterEntity extends HiveObject {
     required this.shoulderWidth,
     required this.chestWidth,
     required this.sleeveLength,
+    required this.order,
   });
 }

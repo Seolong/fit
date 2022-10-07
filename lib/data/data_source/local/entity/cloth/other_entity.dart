@@ -16,10 +16,14 @@ class OtherEntity extends HiveObject {
   @HiveField(3)
   String details;
 
+  @HiveField(4)
+  int order;
+
   OtherEntity({
     required this.id,
     required this.categoryId,
     required this.name,
     required this.details,
+    required this.order,
   });
 }

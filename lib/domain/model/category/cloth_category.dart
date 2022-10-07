@@ -11,6 +11,7 @@ class ClothCategory with _$ClothCategory {
       required int id,
       required ClothType type,
       required String title,
+      required int order,
     }) = _ClothCategory;
 
     factory ClothCategory.fromJson(Map<String, dynamic> json) => _$ClothCategoryFromJson(json);

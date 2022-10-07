@@ -18,6 +18,7 @@ extension ToTop on TopEntity {
       shoulderWidth: shoulderWidth,
       chestWidth: chestWidth,
       sleeveLength: sleeveLength,
+      order: order,
     );
   }
 }
@@ -32,6 +33,7 @@ extension ToTopEntity on Top {
       shoulderWidth: shoulderWidth,
       chestWidth: chestWidth,
       sleeveLength: sleeveLength,
+      order: order,
     );
   }
 }
@@ -47,6 +49,7 @@ extension ToBottomEntity on Bottom {
       thigh: thigh,
       legOpening: legOpening,
       rise: rise,
+      order: order,
     );
   }
 }
@@ -62,6 +65,7 @@ extension ToBottom on BottomEntity {
       thigh: thigh,
       legOpening: legOpening,
       rise: rise,
+      order: order,
     );
   }
 }
@@ -76,6 +80,7 @@ extension ToOuterEntity on Outer {
       shoulderWidth: shoulderWidth,
       chestWidth: chestWidth,
       sleeveLength: sleeveLength,
+      order: order,
     );
   }
 }
@@ -90,6 +95,7 @@ extension ToOuter on OuterEntity {
       shoulderWidth: shoulderWidth,
       chestWidth: chestWidth,
       sleeveLength: sleeveLength,
+      order: order,
     );
   }
 }
@@ -101,6 +107,7 @@ extension ToOtherEntity on Other {
       categoryId: categoryId,
       name: name,
       details: details,
+      order: order,
     );
   }
 }
@@ -112,6 +119,7 @@ extension ToOther on OtherEntity {
       categoryId: categoryId,
       name: name,
       details: details,
+      order: order,
     );
   }
 }

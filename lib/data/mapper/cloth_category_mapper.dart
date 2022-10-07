@@ -8,6 +8,7 @@ extension ToClothCategory on ClothCategoryEntity {
       id: id,
       type: ClothType.values.byName(type),
       title: title,
+      order: order,
     );
   }
 }
@@ -18,6 +19,7 @@ extension ToClothCategoryEntity on ClothCategory {
       id: id,
       type: type.name,
       title: title,
+      order: order,
     );
   }
 }

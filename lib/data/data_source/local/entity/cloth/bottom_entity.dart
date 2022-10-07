@@ -28,6 +28,9 @@ class BottomEntity extends HiveObject {
   @HiveField(7)
   double rise;
 
+  @HiveField(8)
+  int order;
+
   BottomEntity({
     required this.id,
     required this.categoryId,
@@ -37,5 +40,6 @@ class BottomEntity extends HiveObject {
     required this.thigh,
     required this.legOpening,
     required this.rise,
+    required this.order,
   });
 }

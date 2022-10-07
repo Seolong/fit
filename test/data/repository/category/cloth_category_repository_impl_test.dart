@@ -18,7 +18,7 @@ void main(){
     Hive.registerAdapter(ClothCategoryEntityAdapter());
     ClothCategoryDao dao = ClothCategoryDao();
     final ClothCategoryRepository repository = ClothCategoryRepositoryImpl(dao);
-    repository.insertClothCategory(ClothCategory(id: 0, type: ClothType.top, title: 'title'));
+    repository.insertClothCategory(ClothCategory(id: 0, type: ClothType.top, title: 'title', order: 0));
     final category = await repository.getClothCategoryById(0);
     expect(category.type, ClothType.top);
 
