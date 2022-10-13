@@ -7,6 +7,8 @@ import 'package:fit/di/di_setup.dart';
 import 'package:fit/domain/model/util/count_set.dart';
 import 'package:fit/presentation/first_category/first_category_screen.dart';
 import 'package:fit/presentation/home/home_screen.dart';
+import 'package:fit/presentation/top_list/top_list_screen.dart';
+import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/colors.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/material.dart';
@@ -57,15 +59,21 @@ class MyApp extends StatelessWidget {
   final GoRouter _router = GoRouter(
     routes: <GoRoute>[
       GoRoute(
-        path: '/',
+        path: AppRoutes.home,
         builder: (BuildContext context, GoRouterState state) {
           return HomeScreen();
         },
       ),
       GoRoute(
-        path: '/first/:clothType',
+        path: '${AppRoutes.first}/:clothType',
         builder: (BuildContext context, GoRouterState state) {
           return FirstCategoryScreen(clothType: state.params['clothType']!.toClothType());
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.topList}/:categoryId',
+        builder: (BuildContext context, GoRouterState state) {
+          return TopListScreen(categoryId: int.parse(state.params['categoryId']!));
         },
       ),
     ],

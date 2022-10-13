@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ToTableScreenRouteButton extends StatefulWidget {
+class ToClothListScreenRouteButton extends StatefulWidget {
   final double width;
   final double height;
   final Widget child;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
 
-  const ToTableScreenRouteButton({
+  const ToClothListScreenRouteButton({
     Key? key,
     this.width = 150,
     this.height = 125,
@@ -16,11 +16,11 @@ class ToTableScreenRouteButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ToTableScreenRouteButton> createState() =>
-      _ToTableScreenRouteButtonState();
+  State<ToClothListScreenRouteButton> createState() =>
+      _ToClothListScreenRouteButtonState();
 }
 
-class _ToTableScreenRouteButtonState extends State<ToTableScreenRouteButton> {
+class _ToClothListScreenRouteButtonState extends State<ToClothListScreenRouteButton> {
   final Color _notPressedBackgroundColor = Colors.white;
   final Color _pressedBackgroundColor = Colors.grey[300]!;
   late Color backgroundColor;

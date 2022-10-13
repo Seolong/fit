@@ -1,6 +1,7 @@
 import 'package:fit/presentation/first_category/components/add_category_dialog.dart';
-import 'package:fit/presentation/first_category/components/to_table_screen_route_button.dart';
+import 'package:fit/presentation/first_category/components/to_cloth_list_screen_route_button.dart';
 import 'package:fit/presentation/first_category/first_category_view_model.dart';
+import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,8 @@ class FirstCategoryScreen extends StatelessWidget {
                         context: context,
                         builder: (_) {
                           return AddCategoryDialog(
-                            clothType: clothType,
-                            viewModel: viewModel,
+                            pageClothType: clothType,
+                            firstCategoryViewModel: viewModel,
                           );
                         });
                   },
@@ -72,8 +73,11 @@ class FirstCategoryScreen extends StatelessWidget {
                     itemCount: provider.categories.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Center(
-                        child: ToTableScreenRouteButton(
-                          onTap: () {},
+                        child: ToClothListScreenRouteButton(
+                          onTap: () {
+                            int categoryId = provider.categories[index].id;
+                            context.push('${AppRoutes.topList}/$categoryId');
+                          },
                           onLongPress: () {
                             showDialog(
                               context: context,
@@ -83,7 +87,12 @@ class FirstCategoryScreen extends StatelessWidget {
                               },
                             );
                           },
-                          child: Text(provider.categories[index].title),
+                          child: Text(
+                            provider.categories[index].title,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -103,16 +112,31 @@ class FirstCategoryScreen extends StatelessWidget {
     return AlertDialog(
       content: Row(
         children: [
-          CupertinoButton(child: Text('이름 수정'), onPressed: () {}),
           CupertinoButton(
-              child: Text('삭제'),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return _getDeleteDialog(context, provider, index);
-                    });
-              }),
+            child: Text('이름 수정'),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AddCategoryDialog(
+                      pageClothType: clothType,
+                      firstCategoryViewModel: provider,
+                      isEditMode: true,
+                      clothCategory: provider.categories[index],
+                    );
+                  });
+            },
+          ),
+          CupertinoButton(
+            child: Text('삭제'),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return _getDeleteDialog(context, provider, index);
+                  });
+            },
+          ),
         ],
       ),
       actions: [

@@ -1,4 +1,4 @@
-import 'package:fit/presentation/home/components/cloth_route_button.dart';
+import 'package:fit/presentation/home/components/to_cloth_category_route_button.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,30 +6,30 @@ import 'package:go_router/go_router.dart';
 import '../../util/type/cloth_type.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<ClothRouteButton> buttonList = [
-      ClothRouteButton(
+    final List<ToClothCategoryRouteButton> buttonList = [
+      ToClothCategoryRouteButton(
         name: 'Top',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.top.name}');
         },
       ),
-      ClothRouteButton(
+      ToClothCategoryRouteButton(
         name: 'Bottom',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.bottom.name}');
         },
       ),
-      ClothRouteButton(
+      ToClothCategoryRouteButton(
         name: 'Outer',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.outer.name}');
         },
       ),
-      ClothRouteButton(
+      ToClothCategoryRouteButton(
         name: 'Other',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.other.name}');

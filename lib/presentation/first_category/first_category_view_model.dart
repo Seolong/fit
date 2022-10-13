@@ -55,12 +55,12 @@ class FirstCategoryViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  /// If this method works normally, it will return true.
-  Future<bool> addClothCategory(ClothType clothType, String title) async {
-    if(categories.any((e) => e.title == title && e.type == clothType)){
-      return false;
-    }
+  bool haveThisCategory(ClothType clothType, String title) {
+    return categories.any((e) => e.title == title && e.type == clothType);
+  }
 
+  /// If this method works successfully, it will return true.
+  Future addClothCategory(ClothType clothType, String title) async {
     int id = await getNewCategoryIdUseCase();
     ClothCategory category = ClothCategory(
       id: id,
@@ -72,7 +72,6 @@ class FirstCategoryViewModel with ChangeNotifier {
     categories.add(category);
 
     notifyListeners();
-    return true;
   }
 
   Future deleteClothCategory(ClothCategory category) async {
@@ -84,8 +83,10 @@ class FirstCategoryViewModel with ChangeNotifier {
 
   Future updateClothCategory(ClothCategory category) async {
     await updateClothCategoryUseCase(category);
-    int index = categories.indexOf(category);
-    assert(index != -1, 'FirstCategoryViewModel: No Update item.');
+    ClothCategory itemInCategories = categories.where((e) => e.id == category.id).first;
+    int index = categories.indexOf(itemInCategories);
+    print(index);
+    assert(index != -1, 'FirstCategoryViewModel: Any item is not updated.');
     categories[index] = category;
 
     notifyListeners();

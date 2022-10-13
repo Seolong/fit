@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ClothRouteButton extends StatelessWidget {
+class ToClothCategoryRouteButton extends StatelessWidget {
   final String name;
   final VoidCallback onTap;
   final double _borderRadius = 10;
 
-  const ClothRouteButton({Key? key, required this.name, required this.onTap})
+  const ToClothCategoryRouteButton({Key? key, required this.name, required this.onTap})
       : super(key: key);
 
   @override
