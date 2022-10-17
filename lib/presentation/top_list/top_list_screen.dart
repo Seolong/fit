@@ -1,4 +1,5 @@
 import 'package:fit/di/di_setup.dart';
+import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/presentation/top_list/components/add_top_dialog.dart';
 import 'package:fit/presentation/top_list/components/top_item.dart';
 import 'package:fit/presentation/top_list/top_list_view_model.dart';
@@ -25,24 +26,16 @@ class TopListScreen extends StatelessWidget {
         return SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            floatingActionButton: SizedBox(
-              width: 72,
-              height: 72,
-              child: FloatingActionButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AddTopDialog(
-                      topListViewModel: viewModel,
-                      categoryId: categoryId,
-                    ),
-                  );
-                },
-                child: const Icon(
-                  Icons.add_rounded,
-                  color: Colors.white,
-                ),
-              ),
+            floatingActionButton: AddFAB(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => AddTopDialog(
+                    topListViewModel: viewModel,
+                    categoryId: categoryId,
+                  ),
+                );
+              },
             ),
             appBar: AppBar(
               leading: IconButton(
@@ -74,14 +67,27 @@ class TopListScreen extends StatelessWidget {
                   if (index != 0 && index != provider.tops.length + 1) {
                     int topListIndex = index - 1;
                     Top top = provider.tops[topListIndex];
-                    return TopItem(top, topListIndex);
+                    return TopItem(
+                      top: top,
+                      index: topListIndex,
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => AddTopDialog(
+                            topListViewModel: viewModel,
+                            categoryId: categoryId,
+                            isEditMode: true,
+                            top: top,
+                          ),
+                        );
+                      },
+                    );
                   } else if (index == 0) {
                     return Container(
                       height: 60,
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        border: const Border(bottom: BorderSide(width: 0.5))
-                      ),
+                          color: Colors.grey[100],
+                          border: const Border(bottom: BorderSide(width: 0.5))),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: const [

@@ -1,6 +1,7 @@
 import 'package:fit/presentation/first_category/components/add_category_dialog.dart';
 import 'package:fit/presentation/first_category/components/to_cloth_list_screen_route_button.dart';
 import 'package:fit/presentation/first_category/first_category_view_model.dart';
+import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,10 +33,7 @@ class FirstCategoryScreen extends StatelessWidget {
           viewModel.loadClothCategories(clothType);
           return SafeArea(
             child: Scaffold(
-              floatingActionButton: SizedBox(
-                width: 72,
-                height: 72,
-                child: FloatingActionButton(
+              floatingActionButton: AddFAB(
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -45,12 +43,7 @@ class FirstCategoryScreen extends StatelessWidget {
                             firstCategoryViewModel: viewModel,
                           );
                         });
-                  },
-                  child: const Icon(
-                    Icons.add_rounded,
-                    color: Colors.white,
-                  ),
-                ),
+                  }
               ),
               appBar: AppBar(
                 leading: IconButton(
@@ -89,7 +82,7 @@ class FirstCategoryScreen extends StatelessWidget {
                           },
                           child: Text(
                             provider.categories[index].title,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                             ),
                           ),
@@ -113,7 +106,7 @@ class FirstCategoryScreen extends StatelessWidget {
       content: Row(
         children: [
           CupertinoButton(
-            child: Text('이름 수정'),
+            child: const Text('이름 수정'),
             onPressed: () {
               showDialog(
                   context: context,
@@ -128,7 +121,7 @@ class FirstCategoryScreen extends StatelessWidget {
             },
           ),
           CupertinoButton(
-            child: Text('삭제'),
+            child: const Text('삭제'),
             onPressed: () {
               showDialog(
                   context: context,
@@ -144,7 +137,7 @@ class FirstCategoryScreen extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('닫기'),
+          child: const Text('닫기'),
         ),
       ],
     );
@@ -160,7 +153,7 @@ class FirstCategoryScreen extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(
+          child: const Text(
             '취소',
             style: TextStyle(color: Colors.grey),
           ),
@@ -172,7 +165,7 @@ class FirstCategoryScreen extends StatelessWidget {
             Navigator.of(context).pop();
             Navigator.of(context).pop();
           },
-          child: Text(
+          child: const Text(
             '삭제',
             style: TextStyle(color: Colors.red),
           ),

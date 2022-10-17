@@ -28,11 +28,6 @@ class _AddTopDialogState extends State<AddTopDialog> {
   @override
   void initState() {
     super.initState();
-    //addTopViewModel.nameTextEditingController.text = widget.top?.name ?? '';
-    //addTopViewModel.totalLengthTextEditingController.text = widget.top?.totalLength.toString() ?? '';
-    //addTopViewModel.shoulderWidthTextEditingController.text = widget.top?.shoulderWidth.toString() ?? '';
-    //addTopViewModel.chestWidthTextEditingController.text = widget.top?.chestWidth.toString() ?? '';
-    //addTopViewModel.sleeveLengthTextEditingController.text = widget.top?.sleeveLength.toString() ?? '';
     addTopViewModel.init(
       name: widget.top?.name,
       total: widget.top?.totalLength,
@@ -241,12 +236,17 @@ class _AddTopDialogState extends State<AddTopDialog> {
               );
               navigator.pop();
             } else {
-              // firstCategoryViewModel.updateClothCategory(
-              //   clothCategory!.copyWith(
-              //     title: addTopViewModel.textEditingController.text,
-              //   ),
-              // );
-              navigator.pop();
+              widget.topListViewModel.updateTop(widget.top!.copyWith(
+                name: addTopViewModel.nameTextEditingController.text,
+                totalLength: double.parse(
+                    addTopViewModel.totalLengthTextEditingController.text),
+                shoulderWidth: double.parse(
+                    addTopViewModel.shoulderWidthTextEditingController.text),
+                chestWidth: double.parse(
+                    addTopViewModel.chestWidthTextEditingController.text),
+                sleeveLength: double.parse(
+                    addTopViewModel.sleeveLengthTextEditingController.text),
+              ));
               navigator.pop();
             }
           },

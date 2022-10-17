@@ -26,7 +26,7 @@ class TopListViewModel with ChangeNotifier {
     this.deleteTopUseCase,
     this.updateTopUseCase,
     this.getAllTopsUseCase,
-      this.getClothCategoryByIdUseCase,
+    this.getClothCategoryByIdUseCase,
   );
 
   Future<void> loadTops(int categoryId) async {
@@ -72,7 +72,6 @@ class TopListViewModel with ChangeNotifier {
     await updateTopUseCase(top);
     Top itemInTops = tops.where((e) => e.id == top.id).first;
     int index = tops.indexOf(itemInTops);
-    print(index);
     assert(index != -1, 'TopListViewModel: Any item is not updated.');
     tops[index] = top;
 

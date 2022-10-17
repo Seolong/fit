@@ -1,3 +1,4 @@
+import 'package:fit/util/string_helper.dart';
 import 'package:flutter/cupertino.dart';
 
 class AddTopViewModel {
@@ -46,10 +47,10 @@ class AddTopViewModel {
     double? sleeve,
   }) {
     _nameTextEditingController.text = name ?? '';
-    _totalLengthTextEditingController.text = total?.toString() ?? '';
-    _shoulderWidthTextEditingController.text = shoulder?.toString() ?? '';
-    _chestWidthTextEditingController.text = chest?.toString() ?? '';
-    _sleeveLengthTextEditingController.text = sleeve?.toString() ?? '';
+    _totalLengthTextEditingController.text = total?.toNoDotZeroNumString() ?? '';
+    _shoulderWidthTextEditingController.text = shoulder?.toNoDotZeroNumString() ?? '';
+    _chestWidthTextEditingController.text = chest?.toNoDotZeroNumString() ?? '';
+    _sleeveLengthTextEditingController.text = sleeve?.toNoDotZeroNumString() ?? '';
 
     isNameNotEmpty = nameTextEditingController.text.isNotEmpty;
   }
