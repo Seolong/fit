@@ -29,8 +29,9 @@ class TopListViewModel with ChangeNotifier {
       this.getClothCategoryByIdUseCase,
   );
 
-  Future<void> loadTops() async {
-    tops = await getAllTopsUseCase();
+  Future<void> loadTops(int categoryId) async {
+    var allTops = await getAllTopsUseCase();
+    tops = allTops.where((e) => e.categoryId == categoryId).toList();
 
     notifyListeners();
   }
@@ -42,7 +43,6 @@ class TopListViewModel with ChangeNotifier {
     required double shoulderWidth,
     required double chestWidth,
     required double sleeveLength,
-    required int order,
   }) async {
     int id = await getNewTopIdUseCase();
     Top top = Top(
@@ -53,9 +53,10 @@ class TopListViewModel with ChangeNotifier {
       shoulderWidth: shoulderWidth,
       chestWidth: chestWidth,
       sleeveLength: sleeveLength,
-      order: order,
+      order: id,
     );
     await insertTopUseCase(top);
+    tops.add(top);
 
     notifyListeners();
   }

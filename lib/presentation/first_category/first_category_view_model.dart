@@ -59,7 +59,6 @@ class FirstCategoryViewModel with ChangeNotifier {
     return categories.any((e) => e.title == title && e.type == clothType);
   }
 
-  /// If this method works successfully, it will return true.
   Future addClothCategory(ClothType clothType, String title) async {
     int id = await getNewCategoryIdUseCase();
     ClothCategory category = ClothCategory(
