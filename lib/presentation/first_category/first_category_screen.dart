@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:reorderables/reorderables.dart';
 
 import '../../di/di_setup.dart';
 
@@ -33,18 +34,16 @@ class FirstCategoryScreen extends StatelessWidget {
           viewModel.loadClothCategories(clothType);
           return SafeArea(
             child: Scaffold(
-              floatingActionButton: AddFAB(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AddCategoryDialog(
-                            pageClothType: clothType,
-                            firstCategoryViewModel: viewModel,
-                          );
-                        });
-                  }
-              ),
+              floatingActionButton: AddFAB(onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AddCategoryDialog(
+                        pageClothType: clothType,
+                        firstCategoryViewModel: viewModel,
+                      );
+                    });
+              }),
               appBar: AppBar(
                 leading: IconButton(
                   icon: const Icon(
@@ -62,42 +61,64 @@ class FirstCategoryScreen extends StatelessWidget {
               body: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50),
                 child: Consumer<FirstCategoryViewModel>(
-                  builder: (context, provider, child) => GridView.builder(
-                    itemCount: provider.categories.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Center(
-                        child: ToClothListScreenRouteButton(
-                          onTap: () {
-                            int categoryId = provider.categories[index].id;
-                            context.push('${AppRoutes.topList}/$categoryId');
-                          },
-                          onLongPress: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) {
-                                return _getLongPressDialog(
-                                    context, provider, index);
-                              },
-                            );
-                          },
-                          child: Text(
-                            provider.categories[index].title,
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200),
+                  builder: (context, provider, child) => SizedBox.expand(
+                    child: ReorderableWrap(
+                      buildDraggableFeedback: (BuildContext context,
+                              BoxConstraints constraints, Widget child) =>
+                          Material(
+                        elevation: 6.0,
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.zero,
+                        child: child,
+                      ),
+                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
+                      alignment: WrapAlignment.spaceBetween,
+                      runSpacing: 30,
+                      //enableReorder: false,
+                      onReorder: (oldIndex, newIndex) =>
+                          viewModel.reorderClothCategory(oldIndex, newIndex),
+                      children: _getRouteButton(context, viewModel),
+                    ),
                   ),
                 ),
               ),
             ),
           );
         });
+  }
+
+  List<ToClothListScreenRouteButton> _getRouteButton(
+      BuildContext context, FirstCategoryViewModel viewModel) {
+    List<ToClothListScreenRouteButton> buttonList = [];
+
+    for (var category in viewModel.categories) {
+      buttonList.add(
+        ToClothListScreenRouteButton(
+          onTap: () {
+            int categoryId = category.id;
+            context.push('${AppRoutes.topList}/$categoryId');
+          },
+          onLongPress: null,
+          //onLongPress: () {
+          // showDialog(
+          //   context: context,
+          //   builder: (_) {
+          //     return _getLongPressDialog(
+          //         context, viewModel, index);
+          //   },
+          // );
+          //},
+          child: Text(
+            category.title,
+            style: const TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return buttonList;
   }
 
   AlertDialog _getLongPressDialog(
@@ -161,7 +182,6 @@ class FirstCategoryScreen extends StatelessWidget {
         TextButton(
           onPressed: () {
             provider.deleteClothCategory(provider.categories[index]);
-            // TODO: 내부 데이터도 싹 다 삭제
             Navigator.of(context).pop();
             Navigator.of(context).pop();
           },

@@ -5,7 +5,7 @@ class ToClothListScreenRouteButton extends StatefulWidget {
   final double height;
   final Widget child;
   final VoidCallback onTap;
-  final VoidCallback onLongPress;
+  final VoidCallback? onLongPress;
 
   const ToClothListScreenRouteButton({
     Key? key,
@@ -51,16 +51,16 @@ class _ToClothListScreenRouteButtonState extends State<ToClothListScreenRouteBut
       },
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
-      onLongPressEnd: (_) {
+      onLongPressEnd: widget.onLongPress != null ? (_) {
         setState(() {
           backgroundColor = _notPressedBackgroundColor;
         });
-      },
-      onLongPressCancel: () {
+      }: null,
+      onLongPressCancel: widget.onLongPress != null ? () {
         setState(() {
           backgroundColor = _notPressedBackgroundColor;
         });
-      },
+      }: null,
       child: Container(
         width: widget.width,
         height: widget.height,

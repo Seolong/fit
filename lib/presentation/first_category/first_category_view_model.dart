@@ -82,7 +82,8 @@ class FirstCategoryViewModel with ChangeNotifier {
 
   Future updateClothCategory(ClothCategory category) async {
     await updateClothCategoryUseCase(category);
-    ClothCategory itemInCategories = categories.where((e) => e.id == category.id).first;
+    ClothCategory itemInCategories =
+        categories.where((e) => e.id == category.id).first;
     int index = categories.indexOf(itemInCategories);
     print(index);
     assert(index != -1, 'FirstCategoryViewModel: Any item is not updated.');
@@ -91,5 +92,27 @@ class FirstCategoryViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future reorderClothCategory() async {}
+  Future<void> reorderClothCategory(int oldIndex, int newIndex) async {
+    int newOrder = categories[newIndex].order;
+    if (oldIndex > newIndex) {
+      for (int i = newIndex; i < oldIndex; i++) {
+        updateClothCategoryUseCase(
+            categories[i].copyWith(order: categories[i + 1].order));
+      }
+    } else if (oldIndex < newIndex) {
+      for (int i = newIndex; i > oldIndex; i--) {
+        updateClothCategoryUseCase(
+            categories[i].copyWith(order: categories[i - 1].order));
+      }
+    } else{
+      return;
+    }
+    updateClothCategoryUseCase(
+        categories[oldIndex].copyWith(order: newOrder));
+
+    var item = categories.removeAt(oldIndex);
+    categories.insert(newIndex, item);
+
+    notifyListeners();
+  }
 }
