@@ -16,7 +16,7 @@ import '../../domain/model/category/cloth_category.dart';
 class FirstCategoryViewModel with ChangeNotifier {
   final GetNewCategoryIdUseCase getNewCategoryIdUseCase;
   final InsertClothCategoryUseCase insertClothCategoryUseCase;
-  final DeleteClothCategory deleteClothCategoryUseCase;
+  final DeleteClothCategoryUseCase deleteClothCategoryUseCase;
   final UpdateClothCategoryUseCase updateClothCategoryUseCase;
   final GetAllTopCategoriesUseCase getAllTopCategoriesUseCase;
   final GetAllBottomCategoriesUseCase getAllBottomCategoriesUseCase;
