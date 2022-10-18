@@ -198,12 +198,7 @@ class _AddTopDialogState extends State<AddTopDialog> {
       actions: [
         TextButton(
             onPressed: () {
-              if (widget.isEditMode) {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              } else {
-                Navigator.of(context).pop();
-              }
+              Navigator.of(context).pop();
             },
             child: const Text(
               '취소',

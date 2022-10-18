@@ -10,8 +10,10 @@ import 'package:fit/presentation/home/home_screen.dart';
 import 'package:fit/presentation/top_list/top_list_screen.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/colors.dart';
+import 'package:fit/util/size_value.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -25,6 +27,10 @@ void main() async {
   Hive.registerAdapter(OtherEntityAdapter());
   Hive.registerAdapter(ClothCategoryEntityAdapter());
   Hive.registerAdapter(CountSetAdapter());
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [SystemUiOverlay.bottom],
+  );
   runApp(MyApp());
 }
 
@@ -42,12 +48,9 @@ class MyApp extends StatelessWidget {
           iconSize: 48,
         ),
         appBarTheme: const AppBarTheme(
-          toolbarHeight: 68,
+          toolbarHeight: SizeValue.appBarHeight,
           backgroundColor: CustomColor.lightGrey,
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 24
-          ),
+          titleTextStyle: TextStyle(color: Colors.black, fontSize: 24),
         ),
         scaffoldBackgroundColor: CustomColor.lightGrey,
         primarySwatch: Colors.blue,
@@ -67,13 +70,15 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '${AppRoutes.first}/:clothType',
         builder: (BuildContext context, GoRouterState state) {
-          return FirstCategoryScreen(clothType: state.params['clothType']!.toClothType());
+          return FirstCategoryScreen(
+              clothType: state.params['clothType']!.toClothType());
         },
       ),
       GoRoute(
         path: '${AppRoutes.topList}/:categoryId',
         builder: (BuildContext context, GoRouterState state) {
-          return TopListScreen(categoryId: int.parse(state.params['categoryId']!));
+          return TopListScreen(
+              categoryId: int.parse(state.params['categoryId']!));
         },
       ),
     ],

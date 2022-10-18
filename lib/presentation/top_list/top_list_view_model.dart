@@ -19,6 +19,14 @@ class TopListViewModel with ChangeNotifier {
   final GetClothCategoryByIdUseCase getClothCategoryByIdUseCase;
 
   List<Top> tops = [];
+  bool _isLongPressed = false;
+
+  bool get isLongPressed => _isLongPressed;
+
+  set isLongPressed(bool value) {
+    _isLongPressed = value;
+    notifyListeners();
+  }
 
   TopListViewModel(
     this.getNewTopIdUseCase,
