@@ -1,45 +1,45 @@
 import 'package:fit/presentation/top_list/components/add_top_view_model.dart';
-import 'package:fit/presentation/top_list/top_list_view_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../../domain/model/cloth/top.dart';
+import '../../../domain/model/cloth/outer.dart';
+import '../outer_list_view_model.dart';
 
-class AddTopDialog extends StatefulWidget {
-  const AddTopDialog({
+class AddOuterDialog extends StatefulWidget {
+  const AddOuterDialog({
     Key? key,
-    this.top,
+    this.outer,
     this.isEditMode = false,
-    required this.topListViewModel,
+    required this.outerListViewModel,
     required this.categoryId,
   }) : super(key: key);
 
-  final Top? top;
+  final Outer? outer;
   final bool isEditMode;
-  final TopListViewModel topListViewModel;
+  final OuterListViewModel outerListViewModel;
   final int categoryId;
 
   @override
-  State<AddTopDialog> createState() => _AddTopDialogState();
+  State<AddOuterDialog> createState() => _AddOuterDialogState();
 }
 
-class _AddTopDialogState extends State<AddTopDialog> {
-  final AddOuterViewModel addTopViewModel = AddOuterViewModel();
+class _AddOuterDialogState extends State<AddOuterDialog> {
+  final AddOuterViewModel addOuterViewModel = AddOuterViewModel();
 
   @override
   void initState() {
     super.initState();
-    addTopViewModel.init(
-      name: widget.top?.name,
-      total: widget.top?.totalLength,
-      shoulder: widget.top?.shoulderWidth,
-      chest: widget.top?.chestWidth,
-      sleeve: widget.top?.sleeveLength,
+    addOuterViewModel.init(
+      name: widget.outer?.name,
+      total: widget.outer?.totalLength,
+      shoulder: widget.outer?.shoulderWidth,
+      chest: widget.outer?.chestWidth,
+      sleeve: widget.outer?.sleeveLength,
     );
   }
 
   @override
   void dispose() {
-    addTopViewModel.dispose();
+    addOuterViewModel.dispose();
     super.dispose();
   }
 
@@ -65,33 +65,33 @@ class _AddTopDialogState extends State<AddTopDialog> {
             TextField(
               textInputAction: TextInputAction.next,
               style: _getFieldTextStyle(),
-              controller: addTopViewModel.nameTextEditingController,
+              controller: addOuterViewModel.nameTextEditingController,
               onChanged: (value) {
-                if (addTopViewModel.nameErrorMessage != null) {
+                if (addOuterViewModel.nameErrorMessage != null) {
                   setState(() {
-                    addTopViewModel.setErrorMessageToNull();
+                    addOuterViewModel.setErrorMessageToNull();
                   });
                 }
                 setState(() {
-                  addTopViewModel.isNameNotEmpty = value.isNotEmpty;
+                  addOuterViewModel.isNameNotEmpty = value.isNotEmpty;
                 });
               },
               decoration: _getInputDecoration(
                 labelText: '이름',
-                errorText: addTopViewModel.nameErrorMessage,
-                suffixIcon: addTopViewModel.isNameNotEmpty
+                errorText: addOuterViewModel.nameErrorMessage,
+                suffixIcon: addOuterViewModel.isNameNotEmpty
                     ? IconButton(
-                        icon: const Icon(
-                          Icons.clear,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            addTopViewModel.nameTextEditingController.text = '';
-                            addTopViewModel.isNameNotEmpty = false;
-                          });
-                        },
-                      )
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      addOuterViewModel.nameTextEditingController.text = '';
+                      addOuterViewModel.isNameNotEmpty = false;
+                    });
+                  },
+                )
                     : null,
               ),
             ),
@@ -107,17 +107,17 @@ class _AddTopDialogState extends State<AddTopDialog> {
                     style: _getFieldTextStyle(),
                     textAlign: TextAlign.center,
                     controller:
-                        addTopViewModel.totalLengthTextEditingController,
+                    addOuterViewModel.totalLengthTextEditingController,
                     onChanged: (value) {
-                      if (addTopViewModel.totalErrorMessage != null) {
+                      if (addOuterViewModel.totalErrorMessage != null) {
                         setState(() {
-                          addTopViewModel.setErrorMessageToNull();
+                          addOuterViewModel.setErrorMessageToNull();
                         });
                       }
                     },
                     decoration: _getInputDecoration(
                       labelText: '총장',
-                      errorText: addTopViewModel.totalErrorMessage,
+                      errorText: addOuterViewModel.totalErrorMessage,
                     ),
                   ),
                 ),
@@ -131,15 +131,15 @@ class _AddTopDialogState extends State<AddTopDialog> {
                     style: _getFieldTextStyle(),
                     textAlign: TextAlign.center,
                     controller:
-                        addTopViewModel.shoulderWidthTextEditingController,
+                    addOuterViewModel.shoulderWidthTextEditingController,
                     onChanged: (value) {
-                      if (addTopViewModel.shoulderErrorMessage != null) {
-                        addTopViewModel.setErrorMessageToNull();
+                      if (addOuterViewModel.shoulderErrorMessage != null) {
+                        addOuterViewModel.setErrorMessageToNull();
                       }
                     },
                     decoration: _getInputDecoration(
                       labelText: '어깨너비',
-                      errorText: addTopViewModel.shoulderErrorMessage,
+                      errorText: addOuterViewModel.shoulderErrorMessage,
                     ),
                   ),
                 ),
@@ -156,15 +156,15 @@ class _AddTopDialogState extends State<AddTopDialog> {
                     textInputAction: TextInputAction.next,
                     style: _getFieldTextStyle(),
                     textAlign: TextAlign.center,
-                    controller: addTopViewModel.chestWidthTextEditingController,
+                    controller: addOuterViewModel.chestWidthTextEditingController,
                     onChanged: (value) {
-                      if (addTopViewModel.chestErrorMessage != null) {
-                        addTopViewModel.setErrorMessageToNull();
+                      if (addOuterViewModel.chestErrorMessage != null) {
+                        addOuterViewModel.setErrorMessageToNull();
                       }
                     },
                     decoration: _getInputDecoration(
                       labelText: '가슴단면',
-                      errorText: addTopViewModel.chestErrorMessage,
+                      errorText: addOuterViewModel.chestErrorMessage,
                     ),
                   ),
                 ),
@@ -178,15 +178,15 @@ class _AddTopDialogState extends State<AddTopDialog> {
                     style: _getFieldTextStyle(),
                     textAlign: TextAlign.center,
                     controller:
-                        addTopViewModel.sleeveLengthTextEditingController,
+                    addOuterViewModel.sleeveLengthTextEditingController,
                     onChanged: (value) {
-                      if (addTopViewModel.sleeveErrorMessage != null) {
-                        addTopViewModel.setErrorMessageToNull();
+                      if (addOuterViewModel.sleeveErrorMessage != null) {
+                        addOuterViewModel.setErrorMessageToNull();
                       }
                     },
                     decoration: _getInputDecoration(
                       labelText: '소매길이',
-                      errorText: addTopViewModel.sleeveErrorMessage,
+                      errorText: addOuterViewModel.sleeveErrorMessage,
                     ),
                   ),
                 ),
@@ -206,9 +206,9 @@ class _AddTopDialogState extends State<AddTopDialog> {
             )),
         TextButton(
           onPressed: () async {
-            if (addTopViewModel.isAnyFieldEmpty()) {
+            if (addOuterViewModel.isAnyFieldEmpty()) {
               setState(() {
-                addTopViewModel.setErrorMessageNoText();
+                addOuterViewModel.setErrorMessageNoText();
               });
               return;
             }
@@ -217,30 +217,30 @@ class _AddTopDialogState extends State<AddTopDialog> {
             final navigator = Navigator.of(context);
 
             if (!widget.isEditMode) {
-              widget.topListViewModel.addTop(
+              widget.outerListViewModel.addOuter(
                 categoryId: widget.categoryId,
-                name: addTopViewModel.nameTextEditingController.text,
+                name: addOuterViewModel.nameTextEditingController.text,
                 totalLength: double.parse(
-                    addTopViewModel.totalLengthTextEditingController.text),
+                    addOuterViewModel.totalLengthTextEditingController.text),
                 shoulderWidth: double.parse(
-                    addTopViewModel.shoulderWidthTextEditingController.text),
+                    addOuterViewModel.shoulderWidthTextEditingController.text),
                 chestWidth: double.parse(
-                    addTopViewModel.chestWidthTextEditingController.text),
+                    addOuterViewModel.chestWidthTextEditingController.text),
                 sleeveLength: double.parse(
-                    addTopViewModel.sleeveLengthTextEditingController.text),
+                    addOuterViewModel.sleeveLengthTextEditingController.text),
               );
               navigator.pop();
             } else {
-              widget.topListViewModel.updateTop(widget.top!.copyWith(
-                name: addTopViewModel.nameTextEditingController.text,
+              widget.outerListViewModel.updateOuter(widget.outer!.copyWith(
+                name: addOuterViewModel.nameTextEditingController.text,
                 totalLength: double.parse(
-                    addTopViewModel.totalLengthTextEditingController.text),
+                    addOuterViewModel.totalLengthTextEditingController.text),
                 shoulderWidth: double.parse(
-                    addTopViewModel.shoulderWidthTextEditingController.text),
+                    addOuterViewModel.shoulderWidthTextEditingController.text),
                 chestWidth: double.parse(
-                    addTopViewModel.chestWidthTextEditingController.text),
+                    addOuterViewModel.chestWidthTextEditingController.text),
                 sleeveLength: double.parse(
-                    addTopViewModel.sleeveLengthTextEditingController.text),
+                    addOuterViewModel.sleeveLengthTextEditingController.text),
               ));
               navigator.pop();
             }

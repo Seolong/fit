@@ -8,6 +8,7 @@ import 'package:fit/domain/model/util/count_set.dart';
 import 'package:fit/presentation/bottom_list/bottom_list_screen.dart';
 import 'package:fit/presentation/first_category/first_category_screen.dart';
 import 'package:fit/presentation/home/home_screen.dart';
+import 'package:fit/presentation/outer_list/outer_list_screen.dart';
 import 'package:fit/presentation/top_list/top_list_screen.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/colors.dart';
@@ -86,6 +87,13 @@ class MyApp extends StatelessWidget {
         path: '${AppRoutes.bottomList}/:categoryId',
         builder: (BuildContext context, GoRouterState state) {
           return BottomListScreen(
+              categoryId: int.parse(state.params['categoryId']!));
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.outerList}/:categoryId',
+        builder: (BuildContext context, GoRouterState state) {
+          return OuterListScreen(
               categoryId: int.parse(state.params['categoryId']!));
         },
       ),

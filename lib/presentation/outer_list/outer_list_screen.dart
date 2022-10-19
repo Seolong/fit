@@ -1,17 +1,18 @@
 import 'package:fit/di/di_setup.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
-import 'package:fit/presentation/global_components/top_snack_bar.dart';
-import 'package:fit/presentation/top_list/components/add_top_dialog.dart';
-import 'package:fit/presentation/top_list/components/top_item.dart';
-import 'package:fit/presentation/top_list/top_list_view_model.dart';
+import 'package:fit/presentation/outer_list/outer_list_view_model.dart';
 import 'package:fit/util/size_value.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class TopListScreen extends StatelessWidget {
-  const TopListScreen({Key? key, required this.categoryId}) : super(key: key);
+import '../global_components/top_snack_bar.dart';
+import 'compoenets/add_outer_dialog.dart';
+import 'compoenets/outer_item.dart';
+
+class OuterListScreen extends StatelessWidget {
+  const OuterListScreen({Key? key, required this.categoryId}) : super(key: key);
 
   final int categoryId;
   static const double _tablePadding = 4;
@@ -20,10 +21,10 @@ class TopListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => getIt<TopListViewModel>(),
+      create: (_) => getIt<OuterListViewModel>(),
       builder: (context, __) {
-        final viewModel = context.read<TopListViewModel>();
-        viewModel.loadTops(categoryId);
+        final viewModel = context.read<OuterListViewModel>();
+        viewModel.loadOuters(categoryId);
         return Stack(
           children: [
             SafeArea(
@@ -33,8 +34,8 @@ class TopListScreen extends StatelessWidget {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder: (_) => AddTopDialog(
-                        topListViewModel: viewModel,
+                      builder: (_) => AddOuterDialog(
+                        outerListViewModel: viewModel,
                         categoryId: categoryId,
                       ),
                     );
@@ -52,7 +53,7 @@ class TopListScreen extends StatelessWidget {
                   ),
                   title: FutureBuilder<String>(
                     future: context
-                        .read<TopListViewModel>()
+                        .read<OuterListViewModel>()
                         .getCategoryTitle(categoryId),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -63,7 +64,7 @@ class TopListScreen extends StatelessWidget {
                     },
                   ),
                   actions: [
-                    Consumer<TopListViewModel>(
+                    Consumer<OuterListViewModel>(
                       builder: (context, provider, _) {
                         return SwapButton(
                           onTap: () {
@@ -78,7 +79,7 @@ class TopListScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                body: Consumer<TopListViewModel>(
+                body: Consumer<OuterListViewModel>(
                   builder: (context, provider, _) => Column(
                     children: [
                       _getTableHeader(),
@@ -86,8 +87,8 @@ class TopListScreen extends StatelessWidget {
                         child: ReorderableListView(
                           buildDefaultDragHandles: provider.enableReorder,
                           onReorder: (oldIndex, newIndex) =>
-                              provider.reorderTop(oldIndex, newIndex),
-                          children: _getTopItems(context, provider),
+                              provider.reorderOuter(oldIndex, newIndex),
+                          children: _getOuterItems(context, provider),
                         ),
                       ),
                     ],
@@ -95,19 +96,19 @@ class TopListScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Consumer<TopListViewModel>(
+            Consumer<OuterListViewModel>(
               builder: (context, provider, _) => TopSnackBar(
                 onTap: provider.isLongPressed
                     ? () {
-                        provider.isLongPressed = false;
-                      }
+                  provider.isLongPressed = false;
+                }
                     : null,
                 height: !provider.isLongPressed ? 0 : SizeValue.appBarHeight,
                 transform: Matrix4.translationValues(
                     0, provider.isLongPressed ? 0 : -SizeValue.appBarHeight, 0),
                 text: '삭제 모드 해제',
                 textColor:
-                    provider.isLongPressed ? Colors.black : Colors.transparent,
+                provider.isLongPressed ? Colors.black : Colors.transparent,
               ),
             ),
           ],
@@ -116,36 +117,36 @@ class TopListScreen extends StatelessWidget {
     );
   }
 
-  List<TopItem> _getTopItems(BuildContext context, TopListViewModel viewModel) {
-    List<TopItem> topItemList = [];
+  List<OuterItem> _getOuterItems(BuildContext context, OuterListViewModel viewModel) {
+    List<OuterItem> outerItemList = [];
 
-    for (int i = 0; i < viewModel.tops.length; i++) {
-      topItemList.add(
-        TopItem(
+    for (int i = 0; i < viewModel.outers.length; i++) {
+      outerItemList.add(
+        OuterItem(
           key: ValueKey(i),
-          top: viewModel.tops[i],
+          outer: viewModel.outers[i],
           index: i,
           onTap: () {
             showDialog(
               context: context,
-              builder: (_) => AddTopDialog(
-                topListViewModel: viewModel,
+              builder: (_) => AddOuterDialog(
+                outerListViewModel: viewModel,
                 categoryId: categoryId,
                 isEditMode: true,
-                top: viewModel.tops[i],
+                outer: viewModel.outers[i],
               ),
             );
           },
           onLongPress: !viewModel.enableReorder
               ? () {
-                  viewModel.isLongPressed = true;
-                }
+            viewModel.isLongPressed = true;
+          }
               : null,
         ),
       );
     }
 
-    return topItemList;
+    return outerItemList;
   }
 
   Container _getTableHeader() {
