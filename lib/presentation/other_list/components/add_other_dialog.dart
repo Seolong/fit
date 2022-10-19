@@ -97,8 +97,7 @@ class _AddOtherDialogState extends State<AddOtherDialog> {
               height: 30,
             ),
             TextField(
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               style: _getFieldTextStyle(),
               controller: addOtherViewModel.detailsTextEditingController,
               onChanged: (value) {
