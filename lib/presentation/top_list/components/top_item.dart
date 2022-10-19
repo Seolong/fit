@@ -10,8 +10,10 @@ class TopItem extends StatelessWidget {
   static const double _tableFontSize = 12;
 
   final Top top;
+  /// 테이블 열 색 구분용
   final int index;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
   late final String name;
   late final double total;
   late final double shoulder;
@@ -22,8 +24,9 @@ class TopItem extends StatelessWidget {
     required this.top,
     required this.index,
     required this.onTap,
-    super.key,
-  }) {
+    required this.onLongPress,
+    Key? key,
+  }) : super(key: key){
     name = top.name;
     total = top.totalLength;
     shoulder = top.shoulderWidth;
@@ -51,9 +54,7 @@ class TopItem extends StatelessWidget {
         ),
         GestureDetector(
           onTap: onTap,
-          onLongPress: () {
-            context.read<TopListViewModel>().isLongPressed = true;
-          },
+          onLongPress: onLongPress,
           child: AnimatedContainer(
             height: 60,
             color: index % 2 == 0 ? Colors.white : Colors.grey[100],

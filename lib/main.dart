@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: AppRoutes.home,
         builder: (BuildContext context, GoRouterState state) {
-          return HomeScreen();
+          return const HomeScreen();
         },
       ),
       GoRoute(

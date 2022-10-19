@@ -104,18 +104,18 @@ class FirstCategoryViewModel with ChangeNotifier {
     int newOrder = categories[newIndex].order;
     if (oldIndex > newIndex) {
       for (int i = newIndex; i < oldIndex; i++) {
-        updateClothCategoryUseCase(
+        await updateClothCategoryUseCase(
             categories[i].copyWith(order: categories[i + 1].order));
       }
     } else if (oldIndex < newIndex) {
       for (int i = newIndex; i > oldIndex; i--) {
-        updateClothCategoryUseCase(
+        await updateClothCategoryUseCase(
             categories[i].copyWith(order: categories[i - 1].order));
       }
     } else{
       return;
     }
-    updateClothCategoryUseCase(
+    await updateClothCategoryUseCase(
         categories[oldIndex].copyWith(order: newOrder));
 
     var item = categories.removeAt(oldIndex);

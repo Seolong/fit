@@ -18,6 +18,15 @@ class TopListViewModel with ChangeNotifier {
   final GetAllTopsUseCase getAllTopsUseCase;
   final GetClothCategoryByIdUseCase getClothCategoryByIdUseCase;
 
+  bool _enableReorder = false;
+
+  bool get enableReorder => _enableReorder;
+
+  set enableReorder(bool value) {
+    _enableReorder = value;
+    notifyListeners();
+  }
+
   List<Top> tops = [];
   bool _isLongPressed = false;
 
@@ -86,7 +95,32 @@ class TopListViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> reorderTop() async {}
+  Future<void> reorderTop(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    int newOrder = tops[newIndex].order;
+    if (oldIndex > newIndex) {
+      for (int i = newIndex; i < oldIndex; i++) {
+        await updateTopUseCase(
+            tops[i].copyWith(order: tops[i + 1].order));
+      }
+    } else if (oldIndex < newIndex) {
+      for (int i = newIndex; i > oldIndex; i--) {
+        await updateTopUseCase(
+            tops[i].copyWith(order: tops[i - 1].order));
+      }
+    } else{
+      return;
+    }
+    await updateTopUseCase(
+        tops[oldIndex].copyWith(order: newOrder));
+
+    var item = tops.removeAt(oldIndex);
+    tops.insert(newIndex, item);
+
+    notifyListeners();
+  }
 
   Future<String> getCategoryTitle(int id) async {
     ClothCategory clothCategory = await getClothCategoryByIdUseCase(id);

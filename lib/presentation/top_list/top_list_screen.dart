@@ -1,5 +1,6 @@
 import 'package:fit/di/di_setup.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
+import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/global_components/top_snack_bar.dart';
 import 'package:fit/presentation/top_list/components/add_top_dialog.dart';
 import 'package:fit/presentation/top_list/components/top_item.dart';
@@ -8,8 +9,6 @@ import 'package:fit/util/size_value.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../../domain/model/cloth/top.dart';
 
 class TopListScreen extends StatelessWidget {
   const TopListScreen({Key? key, required this.categoryId}) : super(key: key);
@@ -53,110 +52,55 @@ class TopListScreen extends StatelessWidget {
                     },
                   ),
                   title: FutureBuilder<String>(
-                      future: context
-                          .read<TopListViewModel>()
-                          .getCategoryTitle(categoryId),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data!);
-                        } else {
-                          return const Text('');
-                        }
-                      }),
-                ),
-                body: Consumer<TopListViewModel>(
-                  builder: (context, provider, _) => ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    itemCount: provider.tops.length + 2,
-                    itemBuilder: (context, index) {
-                      if (index != 0 && index != provider.tops.length + 1) {
-                        int topListIndex = index - 1;
-                        Top top = provider.tops[topListIndex];
-                        return TopItem(
-                          top: top,
-                          index: topListIndex,
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AddTopDialog(
-                                topListViewModel: viewModel,
-                                categoryId: categoryId,
-                                isEditMode: true,
-                                top: top,
-                              ),
-                            );
-                          },
-                        );
-                      } else if (index == 0) {
-                        return Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              border:
-                                  const Border(bottom: BorderSide(width: 0.5))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: const [
-                              Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    '이름',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: _tableFontSize),
-                                  )),
-                              VerticalDivider(
-                                color: Colors.black,
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.all(_tablePadding),
-                                  child: Text(
-                                    '총장',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: _tableFontSize),
-                                  ),
-                                ),
-                              ),
-                              VerticalDivider(
-                                color: Colors.black,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '어깨너비',
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: _tableFontSize),
-                                ),
-                              ),
-                              VerticalDivider(
-                                color: Colors.black,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '가슴단면',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: _tableFontSize),
-                                ),
-                              ),
-                              VerticalDivider(
-                                color: Colors.black,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '소매길이',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: _tableFontSize),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                    future: context
+                        .read<TopListViewModel>()
+                        .getCategoryTitle(categoryId),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data!);
                       } else {
-                        return const SizedBox(
-                          height: 100,
-                        );
+                        return const Text('');
                       }
                     },
+                  ),
+                  actions: [
+                    Consumer<TopListViewModel>(
+                      builder: (context, provider, _) {
+                        return SwapButton(
+                          onTap: () {
+                            provider.enableReorder = !provider.enableReorder;
+                          },
+                          text: provider.enableReorder ? 'On' : 'Off',
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
+                body: Consumer<TopListViewModel>(
+                  builder: (context, provider, _) => Column(
+                    children: [
+                      _getTableHeader(),
+                      Flexible(
+                        child: ReorderableListView(
+                          buildDefaultDragHandles: provider.enableReorder,
+                          // buildDraggableFeedback: (BuildContext context,
+                          //         BoxConstraints constraints, Widget child) =>
+                          //     Material(
+                          //   elevation: 6.0,
+                          //   color: Colors.transparent,
+                          //   borderRadius: BorderRadius.zero,
+                          //   child: child,
+                          // ),
+                          // enableReorder: provider.enableReorder,
+                          onReorder: (oldIndex, newIndex) =>
+                              provider.reorderTop(oldIndex, newIndex),
+                          children: _getTopItems(context, provider),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -182,6 +126,100 @@ class TopListScreen extends StatelessWidget {
     );
   }
 
-// AlertDialog _getAddTopDialog(BuildContext context){
-// }
+  List<TopItem> _getTopItems(BuildContext context, TopListViewModel viewModel) {
+    List<TopItem> topItemList = [];
+
+    for (int i = 0; i < viewModel.tops.length; i++) {
+      topItemList.add(
+        TopItem(
+          key: ValueKey(i),
+          top: viewModel.tops[i],
+          index: i,
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) => AddTopDialog(
+                topListViewModel: viewModel,
+                categoryId: categoryId,
+                isEditMode: true,
+                top: viewModel.tops[i],
+              ),
+            );
+          },
+          onLongPress: !viewModel.enableReorder
+              ? () {
+                  viewModel.isLongPressed = true;
+                }
+              : null,
+        ),
+      );
+    }
+
+    return topItemList;
+  }
+
+  Container _getTableHeader() {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+          color: Colors.grey[100],
+          border: const Border(bottom: BorderSide(width: 0.5))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: const [
+          Expanded(
+              flex: 3,
+              child: Text(
+                '이름',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: _tableFontSize),
+              )),
+          VerticalDivider(
+            color: Colors.black,
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(_tablePadding),
+              child: Text(
+                '총장',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: _tableFontSize),
+              ),
+            ),
+          ),
+          VerticalDivider(
+            color: Colors.black,
+          ),
+          Expanded(
+            child: Text(
+              '어깨너비',
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: _tableFontSize),
+            ),
+          ),
+          VerticalDivider(
+            color: Colors.black,
+          ),
+          Expanded(
+            child: Text(
+              '가슴단면',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: _tableFontSize),
+            ),
+          ),
+          VerticalDivider(
+            color: Colors.black,
+          ),
+          Expanded(
+            child: Text(
+              '소매길이',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: _tableFontSize),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -4,7 +4,6 @@ import 'package:fit/presentation/first_category/components/to_cloth_list_screen_
 import 'package:fit/presentation/first_category/first_category_view_model.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/routes/app_routes.dart';
-import 'package:fit/util/size_value.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../di/di_setup.dart';
+import '../global_components/swap_button.dart';
 
 class FirstCategoryScreen extends StatelessWidget {
   const FirstCategoryScreen({Key? key, required this.clothType})
@@ -62,27 +62,11 @@ class FirstCategoryScreen extends StatelessWidget {
                 actions: [
                   Consumer<FirstCategoryViewModel>(
                     builder: (context, provider, _) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              provider.enableReorder = !provider.enableReorder;
-                            },
-                            child: const Icon(
-                              Icons.swap_vert,
-                              size: ButtonSize.small,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            provider.enableReorder ? 'On' : 'Off',
-                            style: const TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
+                      return SwapButton(
+                        onTap: () {
+                          provider.enableReorder = !provider.enableReorder;
+                        },
+                        text: provider.enableReorder ? 'On' : 'Off',
                       );
                     },
                   ),
@@ -110,7 +94,7 @@ class FirstCategoryScreen extends StatelessWidget {
                       enableReorder: provider.enableReorder,
                       onReorder: (oldIndex, newIndex) =>
                           viewModel.reorderClothCategory(oldIndex, newIndex),
-                      children: _getRouteButton(context, viewModel),
+                      children: _getRouteButtons(context, viewModel),
                     ),
                   ),
                 ),
@@ -120,7 +104,7 @@ class FirstCategoryScreen extends StatelessWidget {
         });
   }
 
-  List<ToClothListScreenRouteButton> _getRouteButton(
+  List<ToClothListScreenRouteButton> _getRouteButtons(
       BuildContext context, FirstCategoryViewModel viewModel) {
     List<ToClothListScreenRouteButton> buttonList = [];
 
