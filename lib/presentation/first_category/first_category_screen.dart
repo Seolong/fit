@@ -113,7 +113,20 @@ class FirstCategoryScreen extends StatelessWidget {
         ToClothListScreenRouteButton(
           onTap: () {
             int categoryId = category.id;
-            context.push('${AppRoutes.topList}/$categoryId');
+            switch (clothType) {
+              case ClothType.top:
+                context.push('${AppRoutes.topList}/$categoryId');
+                break;
+              case ClothType.bottom:
+                context.push('${AppRoutes.bottomList}/$categoryId');
+                break;
+              case ClothType.outer:
+                // TODO: Handle this case.
+                break;
+              case ClothType.other:
+                // TODO: Handle this case.
+                break;
+            }
           },
           onLongPress: !viewModel.enableReorder
               ? () {
