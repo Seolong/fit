@@ -24,6 +24,14 @@ class FirstCategoryViewModel with ChangeNotifier {
   final GetAllOtherCategoriesUseCase getAllOtherCategoriesUseCase;
 
   final List<ClothCategory> categories = [];
+  bool _enableReorder = false;
+
+  bool get enableReorder => _enableReorder;
+
+  set enableReorder(bool value) {
+    _enableReorder = value;
+    notifyListeners();
+  }
 
   FirstCategoryViewModel(
     this.getNewCategoryIdUseCase,

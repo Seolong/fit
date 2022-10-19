@@ -41,6 +41,7 @@ class TopListScreen extends StatelessWidget {
                     );
                   },
                 ),
+                // TODO: 순서 바꾸기 기능 넣기
                 appBar: AppBar(
                   leading: IconButton(
                     icon: const Icon(
@@ -162,18 +163,18 @@ class TopListScreen extends StatelessWidget {
             ),
             Consumer<TopListViewModel>(
               builder: (context, provider, _) => TopSnackBar(
-                  onTap: provider.isLongPressed
-                      ? () {
-                          provider.isLongPressed = false;
-                        }
-                      : null,
-                  height: !provider.isLongPressed ? 0 : SizeValue.appBarHeight,
-                  transform: Matrix4.translationValues(0,
-                      provider.isLongPressed ? 0 : -SizeValue.appBarHeight, 0),
-                  text: '삭제 모드 해제',
-                  textColor: provider.isLongPressed
-                      ? Colors.black
-                      : Colors.transparent),
+                onTap: provider.isLongPressed
+                    ? () {
+                        provider.isLongPressed = false;
+                      }
+                    : null,
+                height: !provider.isLongPressed ? 0 : SizeValue.appBarHeight,
+                transform: Matrix4.translationValues(
+                    0, provider.isLongPressed ? 0 : -SizeValue.appBarHeight, 0),
+                text: '삭제 모드 해제',
+                textColor:
+                    provider.isLongPressed ? Colors.black : Colors.transparent,
+              ),
             ),
           ],
         );

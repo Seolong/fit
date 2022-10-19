@@ -1,8 +1,10 @@
+import 'package:fit/domain/model/category/cloth_category.dart';
 import 'package:fit/presentation/first_category/components/add_category_dialog.dart';
 import 'package:fit/presentation/first_category/components/to_cloth_list_screen_route_button.dart';
 import 'package:fit/presentation/first_category/first_category_view_model.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/routes/app_routes.dart';
+import 'package:fit/util/size_value.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +59,37 @@ class FirstCategoryScreen extends StatelessWidget {
                 title: Text(
                   toUpperCaseOnlyFirstLetter(clothType.name),
                 ),
+                actions: [
+                  Consumer<FirstCategoryViewModel>(
+                    builder: (context, provider, _) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              provider.enableReorder = !provider.enableReorder;
+                            },
+                            child: const Icon(
+                              Icons.swap_vert,
+                              size: ButtonSize.small,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            provider.enableReorder ? 'On' : 'Off',
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
               ),
               body: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50),
@@ -74,7 +107,7 @@ class FirstCategoryScreen extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
                       alignment: WrapAlignment.spaceBetween,
                       runSpacing: 30,
-                      //enableReorder: false,
+                      enableReorder: provider.enableReorder,
                       onReorder: (oldIndex, newIndex) =>
                           viewModel.reorderClothCategory(oldIndex, newIndex),
                       children: _getRouteButton(context, viewModel),
@@ -98,16 +131,16 @@ class FirstCategoryScreen extends StatelessWidget {
             int categoryId = category.id;
             context.push('${AppRoutes.topList}/$categoryId');
           },
-          onLongPress: null,
-          //onLongPress: () {
-          // showDialog(
-          //   context: context,
-          //   builder: (_) {
-          //     return _getLongPressDialog(
-          //         context, viewModel, index);
-          //   },
-          // );
-          //},
+          onLongPress: !viewModel.enableReorder
+              ? () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return _getLongPressDialog(context, viewModel, category);
+                    },
+                  );
+                }
+              : null,
           child: Text(
             category.title,
             style: const TextStyle(
@@ -121,8 +154,8 @@ class FirstCategoryScreen extends StatelessWidget {
     return buttonList;
   }
 
-  AlertDialog _getLongPressDialog(
-      BuildContext context, FirstCategoryViewModel provider, int index) {
+  AlertDialog _getLongPressDialog(BuildContext context,
+      FirstCategoryViewModel provider, ClothCategory category) {
     return AlertDialog(
       content: Row(
         children: [
@@ -136,7 +169,7 @@ class FirstCategoryScreen extends StatelessWidget {
                       pageClothType: clothType,
                       firstCategoryViewModel: provider,
                       isEditMode: true,
-                      clothCategory: provider.categories[index],
+                      clothCategory: category,
                     );
                   });
             },
@@ -147,7 +180,7 @@ class FirstCategoryScreen extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return _getDeleteDialog(context, provider, index);
+                    return _getDeleteDialog(context, provider, category);
                   });
             },
           ),
@@ -164,11 +197,10 @@ class FirstCategoryScreen extends StatelessWidget {
     );
   }
 
-  AlertDialog _getDeleteDialog(
-      BuildContext context, FirstCategoryViewModel provider, int index) {
+  AlertDialog _getDeleteDialog(BuildContext context,
+      FirstCategoryViewModel provider, ClothCategory category) {
     return AlertDialog(
-      content: Text(
-          '${provider.categories[index].title} 내부의 데이터도 같이 삭제됩니다. 삭제하시겠습니까?'),
+      content: Text('${category.title} 내부의 데이터도 같이 삭제됩니다. 삭제하시겠습니까?'),
       actions: [
         TextButton(
           onPressed: () {
@@ -181,7 +213,7 @@ class FirstCategoryScreen extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            provider.deleteClothCategory(provider.categories[index]);
+            provider.deleteClothCategory(category);
             Navigator.of(context).pop();
             Navigator.of(context).pop();
           },
