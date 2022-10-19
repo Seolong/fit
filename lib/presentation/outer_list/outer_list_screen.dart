@@ -209,6 +209,7 @@ class OuterListScreen extends StatelessWidget {
               style: TextStyle(fontSize: _tableFontSize),
             ),
           ),
+          SizedBox(width: 7.5,),
         ],
       ),
     );

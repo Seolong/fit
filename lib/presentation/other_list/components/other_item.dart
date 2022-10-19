@@ -78,6 +78,7 @@ class OtherItem extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(width: 7.5,),
               ],
             ),
           ),

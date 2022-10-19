@@ -180,6 +180,7 @@ class OtherListScreen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(width: 7.5,),
         ],
       ),
     );

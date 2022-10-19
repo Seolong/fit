@@ -115,6 +115,7 @@ class TopItem extends StatelessWidget {
                     style: const TextStyle(fontSize: _tableFontSize),
                   ),
                 ),
+                const SizedBox(width: 7.5,),
               ],
             ),
           ),
