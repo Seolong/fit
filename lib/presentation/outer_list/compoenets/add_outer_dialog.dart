@@ -1,8 +1,8 @@
-import 'package:fit/presentation/top_list/components/add_top_view_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../domain/model/cloth/outer.dart';
 import '../outer_list_view_model.dart';
+import 'add_outer_view_model.dart';
 
 class AddOuterDialog extends StatefulWidget {
   const AddOuterDialog({

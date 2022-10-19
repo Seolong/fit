@@ -23,7 +23,7 @@ class AddTopDialog extends StatefulWidget {
 }
 
 class _AddTopDialogState extends State<AddTopDialog> {
-  final AddOuterViewModel addTopViewModel = AddOuterViewModel();
+  final AddTopViewModel addTopViewModel = AddTopViewModel();
 
   @override
   void initState() {

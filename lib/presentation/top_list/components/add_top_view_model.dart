@@ -1,7 +1,7 @@
 import 'package:fit/util/string_helper.dart';
 import 'package:flutter/cupertino.dart';
 
-class AddOuterViewModel {
+class AddTopViewModel {
   final _nameTextEditingController = TextEditingController();
   final _totalLengthTextEditingController = TextEditingController();
   final _shoulderWidthTextEditingController = TextEditingController();

@@ -124,7 +124,7 @@ class FirstCategoryScreen extends StatelessWidget {
                 context.push('${AppRoutes.outerList}/$categoryId');
                 break;
               case ClothType.other:
-                // TODO: Handle this case.
+                context.push('${AppRoutes.otherList}/$categoryId');
                 break;
             }
           },

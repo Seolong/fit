@@ -4,4 +4,5 @@ class AppRoutes {
   static const topList = '/topList';
   static const bottomList = '/bottomList';
   static const outerList = '/outerList';
+  static const otherList = '/otherList';
 }
