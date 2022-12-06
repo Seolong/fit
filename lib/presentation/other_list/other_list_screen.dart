@@ -27,60 +27,62 @@ class OtherListScreen extends StatelessWidget {
         viewModel.loadOthers(categoryId);
         return Stack(
           children: [
-            SafeArea(
-              child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                floatingActionButton: AddFAB(
+            Scaffold(
+              resizeToAvoidBottomInset: false,
+              floatingActionButton: AddFAB(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AddOtherDialog(
+                      otherListViewModel: viewModel,
+                      categoryId: categoryId,
+                    ),
+                  );
+                },
+              ),
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.black,
+                  ),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AddOtherDialog(
-                        otherListViewModel: viewModel,
-                        categoryId: categoryId,
-                      ),
-                    );
+                    context.pop();
                   },
                 ),
-                appBar: AppBar(
-                  leading: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      context.pop();
-                    },
-                  ),
-                  title: FutureBuilder<String>(
-                    future: context
-                        .read<OtherListViewModel>()
-                        .getCategoryTitle(categoryId),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(snapshot.data!);
-                      } else {
-                        return const Text('');
-                      }
-                    },
-                  ),
-                  actions: [
-                    Consumer<OtherListViewModel>(
-                      builder: (context, provider, _) {
-                        return SwapButton(
-                          onTap: () {
-                            provider.enableReorder = !provider.enableReorder;
-                          },
-                          text: provider.enableReorder ? 'On' : 'Off',
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  ],
+                title: FutureBuilder<String>(
+                  future: context
+                      .read<OtherListViewModel>()
+                      .getCategoryTitle(categoryId),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data!);
+                    } else {
+                      return const Text('');
+                    }
+                  },
                 ),
-                body: Consumer<OtherListViewModel>(
-                  builder: (context, provider, _) => Column(
+                actions: [
+                  Consumer<OtherListViewModel>(
+                    builder: (context, provider, _) {
+                      return SwapButton(
+                        onTap: () {
+                          provider.enableReorder = !provider.enableReorder;
+                        },
+                        reorder: provider.enableReorder,
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+              ),
+              body: Consumer<OtherListViewModel>(
+                builder: (context, provider, _) => Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom),
+                  child: Column(
                     children: [
                       _getTableHeader(),
                       Flexible(

@@ -6,11 +6,11 @@ class SwapButton extends StatelessWidget {
   const SwapButton({
     Key? key,
     required this.onTap,
-    required this.text,
+    required this.reorder,
   }) : super(key: key);
 
   final VoidCallback onTap;
-  final String text;
+  final bool reorder;
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +20,16 @@ class SwapButton extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: onTap,
-          child: const Icon(
+          child: Icon(
             Icons.swap_vert,
             size: ButtonSize.small,
-            color: Colors.black,
+            color: reorder ? Colors.black : Colors.grey,
           ),
         ),
         Text(
-          text,
-          style: const TextStyle(
-            color: Colors.black,
+          reorder ? 'On' : 'Off',
+          style: TextStyle(
+            color: reorder ? Colors.black : Colors.grey,
           ),
         ),
       ],

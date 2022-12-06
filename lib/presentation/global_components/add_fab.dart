@@ -1,3 +1,4 @@
+import 'package:fit/util/size_value.dart';
 import 'package:flutter/material.dart';
 
 class AddFAB extends StatelessWidget {
@@ -8,8 +9,8 @@ class AddFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 72,
-      height: 72,
+      width: ButtonSize.medium,
+      height: ButtonSize.medium,
       child: FloatingActionButton(
         onPressed: onPressed,
         child: const Icon(

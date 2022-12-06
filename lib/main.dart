@@ -30,10 +30,6 @@ void main() async {
   Hive.registerAdapter(OtherEntityAdapter());
   Hive.registerAdapter(ClothCategoryEntityAdapter());
   Hive.registerAdapter(CountSetAdapter());
-  SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.manual,
-    overlays: [SystemUiOverlay.bottom],
-  );
   runApp(MyApp());
 }
 
@@ -51,6 +47,12 @@ class MyApp extends StatelessWidget {
           iconSize: 48,
         ),
         appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: CustomColor.lightGrey,
+            statusBarColor: CustomColor.lightGrey,
+            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          ),
           toolbarHeight: SizeValue.appBarHeight,
           backgroundColor: CustomColor.lightGrey,
           titleTextStyle: TextStyle(color: Colors.black, fontSize: 24),

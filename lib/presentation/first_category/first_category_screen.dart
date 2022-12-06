@@ -34,68 +34,67 @@ class FirstCategoryScreen extends StatelessWidget {
         builder: (context, _) {
           final viewModel = context.read<FirstCategoryViewModel>();
           viewModel.loadClothCategories(clothType);
-          return SafeArea(
-            child: Scaffold(
-              floatingActionButton: AddFAB(onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AddCategoryDialog(
-                        pageClothType: clothType,
-                        firstCategoryViewModel: viewModel,
-                      );
-                    });
-              }),
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    context.pop();
+          return Scaffold(
+            floatingActionButton: AddFAB(onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AddCategoryDialog(
+                      pageClothType: clothType,
+                      firstCategoryViewModel: viewModel,
+                    );
+                  });
+            }),
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  context.pop();
+                },
+              ),
+              title: Text(
+                toUpperCaseOnlyFirstLetter(clothType.name),
+              ),
+              actions: [
+                Consumer<FirstCategoryViewModel>(
+                  builder: (context, provider, _) {
+                    return SwapButton(
+                      onTap: () {
+                        provider.enableReorder = !provider.enableReorder;
+                      },
+                      reorder: provider.enableReorder,
+                    );
                   },
                 ),
-                title: Text(
-                  toUpperCaseOnlyFirstLetter(clothType.name),
+                const SizedBox(
+                  width: 10,
                 ),
-                actions: [
-                  Consumer<FirstCategoryViewModel>(
-                    builder: (context, provider, _) {
-                      return SwapButton(
-                        onTap: () {
-                          provider.enableReorder = !provider.enableReorder;
-                        },
-                        text: provider.enableReorder ? 'On' : 'Off',
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
-              body: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50),
-                child: Consumer<FirstCategoryViewModel>(
-                  builder: (context, provider, child) => SizedBox.expand(
-                    child: ReorderableWrap(
-                      buildDraggableFeedback: (BuildContext context,
-                              BoxConstraints constraints, Widget child) =>
-                          Material(
-                        elevation: 6.0,
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.zero,
-                        child: child,
-                      ),
-                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
-                      alignment: WrapAlignment.spaceBetween,
-                      runSpacing: 30,
-                      enableReorder: provider.enableReorder,
-                      onReorder: (oldIndex, newIndex) =>
-                          viewModel.reorderClothCategory(oldIndex, newIndex),
-                      children: _getRouteButtons(context, viewModel),
+              ],
+            ),
+            body: Consumer<FirstCategoryViewModel>(
+              builder: (context, provider, child) => SizedBox.expand(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom),
+                  child: ReorderableWrap(
+                    buildDraggableFeedback: (BuildContext context,
+                            BoxConstraints constraints, Widget child) =>
+                        Material(
+                      elevation: 6.0,
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.zero,
+                      child: child,
                     ),
+                    padding: const EdgeInsets.all(30),
+                    alignment: WrapAlignment.spaceBetween,
+                    runSpacing: 30,
+                    enableReorder: provider.enableReorder,
+                    onReorder: (oldIndex, newIndex) =>
+                        viewModel.reorderClothCategory(oldIndex, newIndex),
+                    children: _getRouteButtons(context, viewModel),
                   ),
                 ),
               ),

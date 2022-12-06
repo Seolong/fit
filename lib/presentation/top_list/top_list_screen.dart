@@ -26,60 +26,62 @@ class TopListScreen extends StatelessWidget {
         viewModel.loadTops(categoryId);
         return Stack(
           children: [
-            SafeArea(
-              child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                floatingActionButton: AddFAB(
+            Scaffold(
+              resizeToAvoidBottomInset: false,
+              floatingActionButton: AddFAB(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AddTopDialog(
+                      topListViewModel: viewModel,
+                      categoryId: categoryId,
+                    ),
+                  );
+                },
+              ),
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.black,
+                  ),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AddTopDialog(
-                        topListViewModel: viewModel,
-                        categoryId: categoryId,
-                      ),
-                    );
+                    context.pop();
                   },
                 ),
-                appBar: AppBar(
-                  leading: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      context.pop();
-                    },
-                  ),
-                  title: FutureBuilder<String>(
-                    future: context
-                        .read<TopListViewModel>()
-                        .getCategoryTitle(categoryId),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(snapshot.data!);
-                      } else {
-                        return const Text('');
-                      }
-                    },
-                  ),
-                  actions: [
-                    Consumer<TopListViewModel>(
-                      builder: (context, provider, _) {
-                        return SwapButton(
-                          onTap: () {
-                            provider.enableReorder = !provider.enableReorder;
-                          },
-                          text: provider.enableReorder ? 'On' : 'Off',
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  ],
+                title: FutureBuilder<String>(
+                  future: context
+                      .read<TopListViewModel>()
+                      .getCategoryTitle(categoryId),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data!);
+                    } else {
+                      return const Text('');
+                    }
+                  },
                 ),
-                body: Consumer<TopListViewModel>(
-                  builder: (context, provider, _) => Column(
+                actions: [
+                  Consumer<TopListViewModel>(
+                    builder: (context, provider, _) {
+                      return SwapButton(
+                        onTap: () {
+                          provider.enableReorder = !provider.enableReorder;
+                        },
+                        reorder: provider.enableReorder,
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+              ),
+              body: Consumer<TopListViewModel>(
+                builder: (context, provider, _) => Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom),
+                  child: Column(
                     children: [
                       _getTableHeader(),
                       Flexible(
@@ -208,7 +210,9 @@ class TopListScreen extends StatelessWidget {
               style: TextStyle(fontSize: _tableFontSize),
             ),
           ),
-          SizedBox(width: 7.5,),
+          SizedBox(
+            width: 7.5,
+          ),
         ],
       ),
     );

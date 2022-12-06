@@ -37,9 +37,14 @@ class HomeScreen extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         child: ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 125),
+          padding: const EdgeInsets.symmetric(vertical: 75),
           itemCount: 4,
           itemBuilder: (BuildContext context, int index) {
             return Center(child: buttonList[index]);
