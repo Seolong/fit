@@ -4,6 +4,7 @@ import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/other_list/components/add_other_dialog.dart';
 import 'package:fit/presentation/other_list/components/other_item.dart';
 import 'package:fit/presentation/other_list/other_list_view_model.dart';
+import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/size_value.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,13 +32,14 @@ class OtherListScreen extends StatelessWidget {
               resizeToAvoidBottomInset: false,
               floatingActionButton: AddFAB(
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AddOtherDialog(
-                      otherListViewModel: viewModel,
-                      categoryId: categoryId,
-                    ),
-                  );
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (_) => AddOtherDialog(
+                  //     otherListViewModel: viewModel,
+                  //     categoryId: categoryId,
+                  //   ),
+                  // );
+                  context.push(AppRoutes.addClothScreen);
                 },
               ),
               appBar: AppBar(

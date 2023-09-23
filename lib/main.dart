@@ -5,6 +5,7 @@ import 'package:fit/data/data_source/local/entity/cloth/outer_entity.dart';
 import 'package:fit/data/data_source/local/entity/cloth/top_entity.dart';
 import 'package:fit/di/di_setup.dart';
 import 'package:fit/domain/model/util/count_set.dart';
+import 'package:fit/presentation/add_cloth/add_cloth_screen.dart';
 import 'package:fit/presentation/bottom_list/bottom_list_screen.dart';
 import 'package:fit/presentation/first_category/first_category_screen.dart';
 import 'package:fit/presentation/home/home_screen.dart';
@@ -39,6 +40,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
+
     return MaterialApp.router(
       title: 'FIT',
       theme: ThemeData(
@@ -50,14 +53,15 @@ class MyApp extends StatelessWidget {
           systemOverlayStyle: SystemUiOverlayStyle(
             systemNavigationBarColor: CustomColor.lightGrey,
             statusBarColor: CustomColor.lightGrey,
-            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarIconBrightness: Brightness.dark,
+            // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           toolbarHeight: SizeValue.appBarHeight,
-          backgroundColor: CustomColor.lightGrey,
+          backgroundColor: Colors.white,
           titleTextStyle: TextStyle(color: Colors.black, fontSize: 24),
         ),
-        scaffoldBackgroundColor: CustomColor.lightGrey,
+        scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
       ),
       routerConfig: _router,
@@ -76,37 +80,42 @@ class MyApp extends StatelessWidget {
         path: '${AppRoutes.first}/:clothType',
         builder: (BuildContext context, GoRouterState state) {
           return FirstCategoryScreen(
-              clothType: state.params['clothType']!.toClothType());
+              clothType: state.pathParameters['clothType']!.toClothType());
         },
       ),
       GoRoute(
         path: '${AppRoutes.topList}/:categoryId',
         builder: (BuildContext context, GoRouterState state) {
           return TopListScreen(
-              categoryId: int.parse(state.params['categoryId']!));
+              categoryId: int.parse(state.pathParameters['categoryId']!));
         },
       ),
       GoRoute(
         path: '${AppRoutes.bottomList}/:categoryId',
         builder: (BuildContext context, GoRouterState state) {
           return BottomListScreen(
-              categoryId: int.parse(state.params['categoryId']!));
+              categoryId: int.parse(state.pathParameters['categoryId']!));
         },
       ),
       GoRoute(
         path: '${AppRoutes.outerList}/:categoryId',
         builder: (BuildContext context, GoRouterState state) {
           return OuterListScreen(
-              categoryId: int.parse(state.params['categoryId']!));
+              categoryId: int.parse(state.pathParameters['categoryId']!));
         },
       ),
       GoRoute(
         path: '${AppRoutes.otherList}/:categoryId',
         builder: (BuildContext context, GoRouterState state) {
           return OtherListScreen(
-              categoryId: int.parse(state.params['categoryId']!));
+              categoryId: int.parse(state.pathParameters['categoryId']!));
         },
       ),
+      GoRoute(
+          path: AppRoutes.addClothScreen,
+          builder: (BuildContext context, GoRouterState state) {
+            return AddClothScreen();
+          })
     ],
   );
 }

@@ -1,3 +1,4 @@
+import 'package:fit/presentation/home/components/search_text_field.dart';
 import 'package:fit/presentation/home/components/to_cloth_category_route_button.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import '../../util/type/cloth_type.dart';
 
 class HomeScreen extends StatelessWidget {
+  final double horizontalEdgeInset = 30;
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -43,17 +46,27 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 75),
-          itemCount: 4,
-          itemBuilder: (BuildContext context, int index) {
-            return Center(child: buttonList[index]);
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(
-              height: 100,
-            );
-          },
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalEdgeInset),
+              child: SearchTextField(),
+            ),
+            Flexible(
+              child: GridView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 75, horizontal: 30),
+                itemCount: 4,
+                itemBuilder: (BuildContext context, int index) {
+                  return buttonList[index];
+                },
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
