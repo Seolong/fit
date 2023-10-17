@@ -3,8 +3,14 @@ import 'package:flutter/cupertino.dart';
 
 class TopSizeColumn implements SizeColumn {
   @override
-  Widget build() {
+  Widget buildListView(BuildContext context) {
     // TODO: implement build
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildButtonRow(BuildContext context, int categoryId) {
+    // TODO: implement buildButtonRow
     throw UnimplementedError();
   }
 

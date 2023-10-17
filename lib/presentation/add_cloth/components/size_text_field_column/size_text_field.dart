@@ -42,6 +42,7 @@ class _SizeTextFieldState extends State<SizeTextField> {
             )
           ]),
           child: TextField(
+            controller: widget.textEditingController,
             textInputAction: widget.isLast ? TextInputAction.done: TextInputAction.next,
             decoration: const InputDecoration(
               filled: true,

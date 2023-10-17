@@ -65,6 +65,7 @@ class AddClothScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeColumn sizeColumn = SizeColumn(clothType);
     return Scaffold(
       body: Column(
         children: [
@@ -77,40 +78,14 @@ class AddClothScreen extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0),
-              child: SizeColumn(clothType).build(),
+              child: sizeColumn.buildListView(context),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
             child: SizedBox(
               height: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '취소',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '저장',
-                      style: TextStyle(
-                        color: CustomColor.mainBlue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              child: sizeColumn.buildButtonRow(context, categoryId),
             ),
           ),
         ],

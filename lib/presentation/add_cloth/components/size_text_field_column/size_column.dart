@@ -7,7 +7,8 @@ import 'other_size_column.dart';
 import 'outer_size_column.dart';
 
 abstract class SizeColumn {
-  Widget build();
+  Widget buildListView(BuildContext context);
+  Widget buildButtonRow(BuildContext context, int categoryId);
 
   factory SizeColumn(ClothType type) {
     switch (type){

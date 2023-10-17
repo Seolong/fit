@@ -23,16 +23,16 @@ dependencies:
   freezed: ^2.1.0+1
   freezed_annotation: ^2.1.0
   get_it: ^7.2.0
-  go_router: ^10.2.0
+  go_router: ^11.1.4
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
-  injectable: ^1.5.3
-  injectable_generator: ^1.5.4
+  injectable: ^2.3.2
+  injectable_generator: ^2.4.1
   mockito: ^5.3.1
   path_provider: ^2.0.11
   provider: ^6.0.3
-  reorderables: ^0.5.0
+  reorderables: ^0.6.0
 
 
 dev_dependencies:
