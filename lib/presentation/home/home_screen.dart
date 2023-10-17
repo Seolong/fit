@@ -54,6 +54,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Flexible(
               child: GridView.builder(
+                physics: const RangeMaintainingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(vertical: 75, horizontal: 30),
                 itemCount: 4,
                 itemBuilder: (BuildContext context, int index) {

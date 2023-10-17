@@ -6,6 +6,7 @@ import 'package:fit/presentation/other_list/components/other_item.dart';
 import 'package:fit/presentation/other_list/other_list_view_model.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/size_value.dart';
+import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class OtherListScreen extends StatelessWidget {
             Scaffold(
               resizeToAvoidBottomInset: false,
               floatingActionButton: AddFAB(
-                onPressed: () {
+                onPressed: () async {
                   // showDialog(
                   //   context: context,
                   //   builder: (_) => AddOtherDialog(
@@ -39,7 +40,8 @@ class OtherListScreen extends StatelessWidget {
                   //     categoryId: categoryId,
                   //   ),
                   // );
-                  context.push(AppRoutes.addClothScreen);
+                  final String categoryTitle = await viewModel.getCategoryTitle(categoryId);
+                  context.push('${AppRoutes.addClothScreen}/$categoryId/${ClothType.other.name}/$categoryTitle');
                 },
               ),
               appBar: AppBar(

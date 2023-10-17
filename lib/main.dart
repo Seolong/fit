@@ -40,11 +40,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.bottom]);
 
     return MaterialApp.router(
       title: 'FIT',
       theme: ThemeData(
+        fontFamily: "Pretendard",
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.black,
           iconSize: 48,
@@ -112,9 +114,13 @@ class MyApp extends StatelessWidget {
         },
       ),
       GoRoute(
-          path: AppRoutes.addClothScreen,
+          path: '${AppRoutes.addClothScreen}/:categoryId/:clothType/:categoryTitle',
           builder: (BuildContext context, GoRouterState state) {
-            return AddClothScreen();
+            return AddClothScreen(
+              categoryId: int.parse(state.pathParameters['categoryId']!),
+              clothType: state.pathParameters['clothType']!.toClothType(),
+              categoryTitle: state.pathParameters['categoryTitle']!,
+            );
           })
     ],
   );

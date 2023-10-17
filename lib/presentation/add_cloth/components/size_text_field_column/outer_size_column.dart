@@ -3,9 +3,8 @@ import 'package:flutter/cupertino.dart';
 
 class OuterSizeColumn implements SizeColumn {
   @override
-  Widget getSizeColumn() {
-    // TODO: implement getSizeColumn
+  Widget build() {
+    // TODO: implement build
     throw UnimplementedError();
   }
-
 }
