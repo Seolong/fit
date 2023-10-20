@@ -53,6 +53,7 @@ class BottomListViewModel with ChangeNotifier {
   Future<void> loadBottoms(int categoryId) async {
     var allBottoms = await getAllBottomsUseCase();
     bottoms = allBottoms.where((e) => e.categoryId == categoryId).toList();
+    bottoms.sort((a, b) => a.order.compareTo(b.order));
 
     notifyListeners();
   }
@@ -95,7 +96,7 @@ class BottomListViewModel with ChangeNotifier {
     await updateBottomUseCase(bottom);
     Bottom itemInBottoms = bottoms.where((e) => e.id == bottom.id).first;
     int index = bottoms.indexOf(itemInBottoms);
-    assert(index != -1, 'TopListViewModel: Any item is not updated.');
+    assert(index != -1, 'BottomListViewModel: Any item is not updated.');
     bottoms[index] = bottom;
 
     notifyListeners();
@@ -110,26 +111,29 @@ class BottomListViewModel with ChangeNotifier {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    int newOrder = bottoms[newIndex].order;
-    if (oldIndex > newIndex) {
-      for (int i = newIndex; i < oldIndex; i++) {
-        await updateBottomUseCase(
-            bottoms[i].copyWith(order: bottoms[i + 1].order));
-      }
-    } else if (oldIndex < newIndex) {
-      for (int i = newIndex; i > oldIndex; i--) {
-        await updateBottomUseCase(
-            bottoms[i].copyWith(order: bottoms[i - 1].order));
-      }
-    } else{
-      return;
-    }
-    await updateBottomUseCase(
-        bottoms[oldIndex].copyWith(order: newOrder));
 
     var item = bottoms.removeAt(oldIndex);
     bottoms.insert(newIndex, item);
 
     notifyListeners();
+
+    if (oldIndex > newIndex) {
+      // 옮겨진 놈의 예전 순서
+      int oldOrderOfMovedItem = bottoms[newIndex].order;
+      for (int i = newIndex; i < oldIndex; i++) {
+        await updateBottomUseCase(
+            bottoms[i].copyWith(order: bottoms[i + 1].order));
+      }
+      await updateBottomUseCase(bottoms[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else if (oldIndex < newIndex) {
+      int oldOrderOfMovedItem = bottoms[newIndex].order;
+      for(int i = newIndex; i>oldIndex; i--){
+        await updateBottomUseCase(
+            bottoms[i].copyWith(order: bottoms[i - 1].order));
+      }
+      await updateBottomUseCase(bottoms[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else {
+      return;
+    }
   }
 }

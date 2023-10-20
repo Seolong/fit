@@ -1,5 +1,6 @@
 import 'package:fit/di/di_setup.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
+import 'package:fit/presentation/global_components/cloth_table_header.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/global_components/delete_mode_snack_bar.dart';
 import 'package:fit/presentation/top_list/components/add_top_dialog.dart';
@@ -10,12 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../routes/app_routes.dart';
+import '../../util/type/cloth_type.dart';
+import '../global_components/gradient_app_bar.dart';
+
 class TopListScreen extends StatelessWidget {
   const TopListScreen({Key? key, required this.categoryId}) : super(key: key);
 
   final int categoryId;
   static const double _tablePadding = 4;
-  static const double _tableFontSize = 12;
+  static const double _tableFontSize = 15;
 
   @override
   Widget build(BuildContext context) {
@@ -29,53 +34,14 @@ class TopListScreen extends StatelessWidget {
             Scaffold(
               resizeToAvoidBottomInset: false,
               floatingActionButton: AddFAB(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AddTopDialog(
-                      topListViewModel: viewModel,
-                      categoryId: categoryId,
-                    ),
-                  );
+                onPressed: () async {
+                  final String categoryTitle =
+                  await viewModel.getCategoryTitle(categoryId);
+                  if (context.mounted) {
+                    context.push(
+                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.top.name}/$categoryTitle');
+                  }
                 },
-              ),
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    context.pop();
-                  },
-                ),
-                title: FutureBuilder<String>(
-                  future: context
-                      .read<TopListViewModel>()
-                      .getCategoryTitle(categoryId),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(snapshot.data!);
-                    } else {
-                      return const Text('');
-                    }
-                  },
-                ),
-                actions: [
-                  Consumer<TopListViewModel>(
-                    builder: (context, provider, _) {
-                      return SwapButton(
-                        onTap: () {
-                          provider.enableReorder = !provider.enableReorder;
-                        },
-                        reorder: provider.enableReorder,
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
               ),
               body: Consumer<TopListViewModel>(
                 builder: (context, provider, _) => Padding(
@@ -83,6 +49,37 @@ class TopListScreen extends StatelessWidget {
                       bottom: MediaQuery.of(context).padding.bottom),
                   child: Column(
                     children: [
+                      GradientAppBar(
+                        center: FutureBuilder<String>(
+                          future: context
+                              .read<TopListViewModel>()
+                              .getCategoryTitle(categoryId),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              );
+                            } else {
+                              return const Text('');
+                            }
+                          },
+                        ),
+                        end: Consumer<TopListViewModel>(
+                          builder: (context, provider, _) {
+                            return SwapButton(
+                              onTap: () {
+                                provider.enableReorder =
+                                !provider.enableReorder;
+                              },
+                              reorder: provider.enableReorder,
+                            );
+                          },
+                        ),
+                      ),
                       _getTableHeader(),
                       Flexible(
                         child: ReorderableListView(
@@ -150,71 +147,51 @@ class TopListScreen extends StatelessWidget {
     return topItemList;
   }
 
-  Container _getTableHeader() {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: const Border(bottom: BorderSide(width: 0.5))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          Expanded(
-              flex: 3,
-              child: Text(
-                '이름',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
-              )),
-          VerticalDivider(
-            color: Colors.black,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(_tablePadding),
-              child: Text(
-                '총장',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
-              ),
+  Widget _getTableHeader() {
+    return const ClothTableHeader(child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(
+            flex: 3,
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '이름',
+            ),),
+        ClothTableHeaderDivider(),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.all(_tablePadding),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '총장',
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
+        ),
+        ClothTableHeaderDivider(),
+        Expanded(
+          child: ClothTableHeaderText(
+            fontSize: _tableFontSize,
+            text: '어깨\n너비',
           ),
-          Expanded(
-            child: Text(
-              '어깨너비',
-              maxLines: 1,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
-            ),
+        ),
+        ClothTableHeaderDivider(),
+        Expanded(
+          child: ClothTableHeaderText(
+            fontSize: _tableFontSize,
+            text: '가슴\n단면',
           ),
-          VerticalDivider(
-            color: Colors.black,
+        ),
+        ClothTableHeaderDivider(),
+        Expanded(
+          child: ClothTableHeaderText(
+            fontSize: _tableFontSize,
+            text: '소매\n길이',
           ),
-          Expanded(
-            child: Text(
-              '가슴단면',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
-            ),
-          ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
-          Expanded(
-            child: Text(
-              '소매길이',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
-            ),
-          ),
-          SizedBox(
-            width: 7.5,
-          ),
-        ],
-      ),
-    );
+        ),
+        SizedBox(
+          width: 7.5,
+        ),
+      ],
+    ));
   }
 }

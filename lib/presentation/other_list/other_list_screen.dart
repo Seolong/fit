@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:fit/di/di_setup.dart';
+import 'package:fit/presentation/global_components/cloth_table_header.dart';
 import 'package:fit/presentation/global_components/gradient_app_bar.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
@@ -8,7 +7,6 @@ import 'package:fit/presentation/other_list/components/add_other_dialog.dart';
 import 'package:fit/presentation/other_list/components/other_item.dart';
 import 'package:fit/presentation/other_list/other_list_view_model.dart';
 import 'package:fit/routes/app_routes.dart';
-import 'package:fit/util/colors.dart';
 import 'package:fit/util/size_value.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +21,6 @@ class OtherListScreen extends StatelessWidget {
   final int categoryId;
   static const double _tablePadding = 4;
   static const double _tableFontSize = 16;
-  static const Color _tableTextColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +80,7 @@ class OtherListScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      _createTableHeader(),
+                      _getTableHeader(),
                       Flexible(
                         child: ReorderableListView(
                           buildDefaultDragHandles: provider.enableReorder,
@@ -150,65 +147,34 @@ class OtherListScreen extends StatelessWidget {
     return otherItemList;
   }
 
-  Widget _createTableHeader() {
-    return Stack(
-      children: [
-        Container(
-          height: 60,
-          decoration: const BoxDecoration(
-            color: CustomColor.skyBlue,
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                  flex: 2,
-                  child: Text(
-                    '이름',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: _tableFontSize,
-                        color: _tableTextColor,
-                        fontWeight: FontWeight.bold),
-                  )),
-              VerticalDivider(
-                color: Colors.white,
-                thickness: 1.5,
-                indent: 18,
-                endIndent: 18,
-              ),
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: EdgeInsets.all(_tablePadding),
-                  child: Text(
-                    '세부사항',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: _tableFontSize,
-                        color: _tableTextColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 7.5,
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-            child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-            child: Container(
-              height: 10,
-              width: double.infinity,
-              color: Colors.black.withOpacity(0),
+  Widget _getTableHeader() {
+    return const ClothTableHeader(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Expanded(
+            flex: 2,
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '이름',
             ),
           ),
-        ))
-      ],
+          ClothTableHeaderDivider(),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: EdgeInsets.all(_tablePadding),
+              child: ClothTableHeaderText(
+                fontSize: _tableFontSize,
+                text: '세부사항',
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 7.5,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -50,6 +50,7 @@ class OuterListViewModel with ChangeNotifier {
   Future<void> loadOuters(int categoryId) async {
     var allOuters = await getAllOutersUseCase();
     outers = allOuters.where((e) => e.categoryId == categoryId).toList();
+    outers.sort((a, b) => a.order.compareTo(b.order));
 
     notifyListeners();
   }
@@ -100,26 +101,30 @@ class OuterListViewModel with ChangeNotifier {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    int newOrder = outers[newIndex].order;
-    if (oldIndex > newIndex) {
-      for (int i = newIndex; i < oldIndex; i++) {
-        await updateOuterUseCase(
-            outers[i].copyWith(order: outers[i + 1].order));
-      }
-    } else if (oldIndex < newIndex) {
-      for (int i = newIndex; i > oldIndex; i--) {
-        await updateOuterUseCase(
-            outers[i].copyWith(order: outers[i - 1].order));
-      }
-    } else {
-      return;
-    }
-    await updateOuterUseCase(outers[oldIndex].copyWith(order: newOrder));
 
     var item = outers.removeAt(oldIndex);
     outers.insert(newIndex, item);
 
     notifyListeners();
+
+    if (oldIndex > newIndex) {
+      // 옮겨진 놈의 예전 순서
+      int oldOrderOfMovedItem = outers[newIndex].order;
+      for (int i = newIndex; i < oldIndex; i++) {
+        await updateOuterUseCase(
+            outers[i].copyWith(order: outers[i + 1].order));
+      }
+      await updateOuterUseCase(outers[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else if (oldIndex < newIndex) {
+      int oldOrderOfMovedItem = outers[newIndex].order;
+      for(int i = newIndex; i>oldIndex; i--){
+        await updateOuterUseCase(
+            outers[i].copyWith(order: outers[i - 1].order));
+      }
+      await updateOuterUseCase(outers[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else {
+      return;
+    }
   }
 
   Future<String> getCategoryTitle(int id) async {

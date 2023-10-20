@@ -1,5 +1,4 @@
 import 'package:fit/util/type/cloth_type.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'cloth_category.freezed.dart';

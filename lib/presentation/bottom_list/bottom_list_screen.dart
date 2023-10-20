@@ -1,5 +1,6 @@
 import 'package:fit/di/di_setup.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
+import 'package:fit/presentation/global_components/cloth_table_header.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/global_components/delete_mode_snack_bar.dart';
 import 'package:fit/util/size_value.dart';
@@ -7,17 +8,21 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../routes/app_routes.dart';
+import '../../util/type/cloth_type.dart';
+import '../global_components/gradient_app_bar.dart';
 import 'bottom_list_view_model.dart';
 import 'components/add_bottom_dialog.dart';
 import 'components/bottom_item.dart';
 
 class BottomListScreen extends StatelessWidget {
+
   const BottomListScreen({Key? key, required this.categoryId})
       : super(key: key);
 
   final int categoryId;
   static const double _tablePadding = 4;
-  static const double _tableFontSize = 12;
+  static const double _tableFontSize = 13.5;
 
   @override
   Widget build(BuildContext context) {
@@ -31,53 +36,14 @@ class BottomListScreen extends StatelessWidget {
             Scaffold(
               resizeToAvoidBottomInset: false,
               floatingActionButton: AddFAB(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AddBottomDialog(
-                      bottomListViewModel: viewModel,
-                      categoryId: categoryId,
-                    ),
-                  );
+                onPressed: () async {
+                  final String categoryTitle =
+                  await viewModel.getCategoryTitle(categoryId);
+                  if (context.mounted) {
+                    context.push(
+                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.bottom.name}/$categoryTitle');
+                  }
                 },
-              ),
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    context.pop();
-                  },
-                ),
-                title: FutureBuilder<String>(
-                  future: context
-                      .read<BottomListViewModel>()
-                      .getCategoryTitle(categoryId),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(snapshot.data!);
-                    } else {
-                      return const Text('');
-                    }
-                  },
-                ),
-                actions: [
-                  Consumer<BottomListViewModel>(
-                    builder: (context, provider, _) {
-                      return SwapButton(
-                        onTap: () {
-                          provider.enableReorder = !provider.enableReorder;
-                        },
-                        reorder: provider.enableReorder,
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
               ),
               body: Consumer<BottomListViewModel>(
                 builder: (context, provider, _) => Padding(
@@ -85,6 +51,37 @@ class BottomListScreen extends StatelessWidget {
                       bottom: MediaQuery.of(context).padding.bottom),
                   child: Column(
                     children: [
+                      GradientAppBar(
+                        center: FutureBuilder<String>(
+                          future: context
+                              .read<BottomListViewModel>()
+                              .getCategoryTitle(categoryId),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              );
+                            } else {
+                              return const Text('');
+                            }
+                          },
+                        ),
+                        end: Consumer<BottomListViewModel>(
+                          builder: (context, provider, _) {
+                            return SwapButton(
+                              onTap: () {
+                                provider.enableReorder =
+                                !provider.enableReorder;
+                              },
+                              reorder: provider.enableReorder,
+                            );
+                          },
+                        ),
+                      ),
                       _getTableHeader(),
                       Flexible(
                         child: ReorderableListView(
@@ -153,73 +150,53 @@ class BottomListScreen extends StatelessWidget {
     return bottomItemList;
   }
 
-  Container _getTableHeader() {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: const Border(bottom: BorderSide(width: 0.5))),
+  Widget _getTableHeader() {
+    return const ClothTableHeader(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
+        children: [
           Expanded(
               flex: 3,
-              child: Text(
-                '이름',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
-              )),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+              child: ClothTableHeaderText(
+                fontSize: _tableFontSize,
+                text: '이름',
+              ),),
+          ClothTableHeaderDivider(),
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(_tablePadding),
-              child: Text(
-                '총장',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
+              child: ClothTableHeaderText(
+                fontSize: _tableFontSize,
+                text: '총장',
               ),
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+          ClothTableHeaderDivider(),
           Expanded(
-            child: Text(
-              '허리\n단면',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '허리\n단면',
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+          ClothTableHeaderDivider(),
           Expanded(
-            child: Text(
-              '허벅지\n단면',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '허벅지\n단면',
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+          ClothTableHeaderDivider(),
           Expanded(
-            child: Text(
-              '밑위',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '밑위',
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+          ClothTableHeaderDivider(),
           Expanded(
-            child: Text(
-              '밑단',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '밑단',
             ),
           ),
           SizedBox(width: 7.5,),

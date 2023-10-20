@@ -1,5 +1,6 @@
 import 'package:fit/di/di_setup.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
+import 'package:fit/presentation/global_components/cloth_table_header.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/outer_list/outer_list_view_model.dart';
 import 'package:fit/util/size_value.dart';
@@ -7,7 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../routes/app_routes.dart';
+import '../../util/type/cloth_type.dart';
 import '../global_components/delete_mode_snack_bar.dart';
+import '../global_components/gradient_app_bar.dart';
 import 'compoenets/add_outer_dialog.dart';
 import 'compoenets/outer_item.dart';
 
@@ -16,7 +20,7 @@ class OuterListScreen extends StatelessWidget {
 
   final int categoryId;
   static const double _tablePadding = 4;
-  static const double _tableFontSize = 12;
+  static const double _tableFontSize = 16;
 
   @override
   Widget build(BuildContext context) {
@@ -30,53 +34,14 @@ class OuterListScreen extends StatelessWidget {
             Scaffold(
               resizeToAvoidBottomInset: false,
               floatingActionButton: AddFAB(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AddOuterDialog(
-                      outerListViewModel: viewModel,
-                      categoryId: categoryId,
-                    ),
-                  );
+                onPressed: () async {
+                  final String categoryTitle =
+                      await viewModel.getCategoryTitle(categoryId);
+                  if (context.mounted) {
+                    context.push(
+                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.outer.name}/$categoryTitle');
+                  }
                 },
-              ),
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    context.pop();
-                  },
-                ),
-                title: FutureBuilder<String>(
-                  future: context
-                      .read<OuterListViewModel>()
-                      .getCategoryTitle(categoryId),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(snapshot.data!);
-                    } else {
-                      return const Text('');
-                    }
-                  },
-                ),
-                actions: [
-                  Consumer<OuterListViewModel>(
-                    builder: (context, provider, _) {
-                      return SwapButton(
-                        onTap: () {
-                          provider.enableReorder = !provider.enableReorder;
-                        },
-                        reorder: provider.enableReorder,
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
               ),
               body: Consumer<OuterListViewModel>(
                 builder: (context, provider, _) => Padding(
@@ -84,6 +49,37 @@ class OuterListScreen extends StatelessWidget {
                       bottom: MediaQuery.of(context).padding.bottom),
                   child: Column(
                     children: [
+                      GradientAppBar(
+                        center: FutureBuilder<String>(
+                          future: context
+                              .read<OuterListViewModel>()
+                              .getCategoryTitle(categoryId),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              );
+                            } else {
+                              return const Text('');
+                            }
+                          },
+                        ),
+                        end: Consumer<OuterListViewModel>(
+                          builder: (context, provider, _) {
+                            return SwapButton(
+                              onTap: () {
+                                provider.enableReorder =
+                                    !provider.enableReorder;
+                              },
+                              reorder: provider.enableReorder,
+                            );
+                          },
+                        ),
+                      ),
                       _getTableHeader(),
                       Flexible(
                         child: ReorderableListView(
@@ -102,15 +98,15 @@ class OuterListScreen extends StatelessWidget {
               builder: (context, provider, _) => DeleteModeSnackBar(
                 onTap: provider.isLongPressed
                     ? () {
-                  provider.isLongPressed = false;
-                }
+                        provider.isLongPressed = false;
+                      }
                     : null,
                 height: !provider.isLongPressed ? 0 : SizeValue.appBarHeight,
                 transform: Matrix4.translationValues(
                     0, provider.isLongPressed ? 0 : SizeValue.appBarHeight, 0),
                 text: '삭제 모드 해제',
                 textColor:
-                provider.isLongPressed ? Colors.black : Colors.transparent,
+                    provider.isLongPressed ? Colors.black : Colors.transparent,
               ),
             ),
           ],
@@ -119,7 +115,8 @@ class OuterListScreen extends StatelessWidget {
     );
   }
 
-  List<OuterItem> _getOuterItems(BuildContext context, OuterListViewModel viewModel) {
+  List<OuterItem> _getOuterItems(
+      BuildContext context, OuterListViewModel viewModel) {
     List<OuterItem> outerItemList = [];
 
     for (int i = 0; i < viewModel.outers.length; i++) {
@@ -141,8 +138,8 @@ class OuterListScreen extends StatelessWidget {
           },
           onLongPress: !viewModel.enableReorder
               ? () {
-            viewModel.isLongPressed = true;
-          }
+                  viewModel.isLongPressed = true;
+                }
               : null,
         ),
       );
@@ -151,67 +148,52 @@ class OuterListScreen extends StatelessWidget {
     return outerItemList;
   }
 
-  Container _getTableHeader() {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: const Border(bottom: BorderSide(width: 0.5))),
+  Widget _getTableHeader() {
+    return const ClothTableHeader(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
+        children: [
           Expanded(
-              flex: 3,
-              child: Text(
-                '이름',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
-              )),
-          VerticalDivider(
-            color: Colors.black,
+            flex: 3,
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: "이름",
+            ),
           ),
+          ClothTableHeaderDivider(),
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(_tablePadding),
-              child: Text(
-                '총장',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
+              child: ClothTableHeaderText(
+                fontSize: _tableFontSize,
+                text: "총장",
               ),
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+          ClothTableHeaderDivider(),
           Expanded(
-            child: Text(
-              '어깨너비',
-              maxLines: 1,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: "어깨\n너비",
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+          ClothTableHeaderDivider(),
           Expanded(
-            child: Text(
-              '가슴단면',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: "가슴\n단면",
             ),
           ),
-          VerticalDivider(
-            color: Colors.black,
-          ),
+          ClothTableHeaderDivider(),
           Expanded(
-            child: Text(
-              '소매길이',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: _tableFontSize),
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: "소매\n길이",
             ),
           ),
-          SizedBox(width: 7.5,),
+          SizedBox(
+            width: 7.5,
+          ),
         ],
       ),
     );

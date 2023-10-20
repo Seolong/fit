@@ -49,6 +49,7 @@ class TopListViewModel with ChangeNotifier {
   Future<void> loadTops(int categoryId) async {
     var allTops = await getAllTopsUseCase();
     tops = allTops.where((e) => e.categoryId == categoryId).toList();
+    tops.sort((a, b) => a.order.compareTo(b.order));
 
     notifyListeners();
   }
@@ -99,27 +100,30 @@ class TopListViewModel with ChangeNotifier {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    int newOrder = tops[newIndex].order;
-    if (oldIndex > newIndex) {
-      for (int i = newIndex; i < oldIndex; i++) {
-        await updateTopUseCase(
-            tops[i].copyWith(order: tops[i + 1].order));
-      }
-    } else if (oldIndex < newIndex) {
-      for (int i = newIndex; i > oldIndex; i--) {
-        await updateTopUseCase(
-            tops[i].copyWith(order: tops[i - 1].order));
-      }
-    } else{
-      return;
-    }
-    await updateTopUseCase(
-        tops[oldIndex].copyWith(order: newOrder));
 
     var item = tops.removeAt(oldIndex);
     tops.insert(newIndex, item);
 
     notifyListeners();
+
+    if (oldIndex > newIndex) {
+      // 옮겨진 놈의 예전 순서
+      int oldOrderOfMovedItem = tops[newIndex].order;
+      for (int i = newIndex; i < oldIndex; i++) {
+        await updateTopUseCase(
+            tops[i].copyWith(order: tops[i + 1].order));
+      }
+      await updateTopUseCase(tops[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else if (oldIndex < newIndex) {
+      int oldOrderOfMovedItem = tops[newIndex].order;
+      for(int i = newIndex; i>oldIndex; i--){
+        await updateTopUseCase(
+            tops[i].copyWith(order: tops[i - 1].order));
+      }
+      await updateTopUseCase(tops[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else {
+      return;
+    }
   }
 
   Future<String> getCategoryTitle(int id) async {

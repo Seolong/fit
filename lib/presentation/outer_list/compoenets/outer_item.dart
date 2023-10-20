@@ -1,13 +1,16 @@
+import 'package:fit/presentation/global_components/cloth_table_row_content.dart';
 import 'package:fit/util/string_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/model/cloth/outer.dart';
+import '../../../util/colors.dart';
+import '../../global_components/trash_can_button.dart';
 import '../outer_list_view_model.dart';
 
 class OuterItem extends StatelessWidget {
   static const double _tablePadding = 4;
-  static const double _tableFontSize = 12;
+  static const double _tableFontSize = 14;
 
   final Outer outer;
   /// 테이블 열 색 구분용
@@ -38,86 +41,71 @@ class OuterItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GestureDetector(
-          onTap: () {
-            context.read<OuterListViewModel>().deleteOuter(outer);
-          },
-          child: const SizedBox(
-            width: 60,
-            height: 60,
-            child: Icon(
-              Icons.delete,
-              size: 36,
-              color: Colors.red,
-            ),
-          ),
-        ),
-        GestureDetector(
+        TrashCanButton(onTap: () {
+          context.read<OuterListViewModel>().deleteOuter(outer);
+        }),
+        ClothTableRowContent(
           onTap: onTap,
           onLongPress: onLongPress,
-          child: AnimatedContainer(
-            height: 60,
-            color: index % 2 == 0 ? Colors.white : Colors.grey[100],
-            duration: const Duration(milliseconds: 500),
-            transform: Matrix4.translationValues(
-                context.read<OuterListViewModel>().isLongPressed ? 65 : 0, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                    flex: 3,
-                    child: Text(
-                      name,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: _tableFontSize),
-                    )),
-                const VerticalDivider(
-                  color: Colors.black,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(_tablePadding),
-                    child: Text(
-                      total.toNoDotZeroNumString(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: _tableFontSize),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(
-                  color: Colors.black,
-                ),
-                Expanded(
+          isLongPressed: context.read<OuterListViewModel>().isLongPressed,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                  flex: 3,
                   child: Text(
-                    shoulder.toNoDotZeroNumString(),
-                    maxLines: 1,
+                    name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: _tableFontSize,
+                        fontWeight: FontWeight.w700,
+                        color: CustomColor.mainBlue),
+                  )),
+              const VerticalDivider(
+                color: Colors.transparent,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(_tablePadding),
+                  child: Text(
+                    total.toNoDotZeroNumString(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: _tableFontSize),
                   ),
                 ),
-                const VerticalDivider(
-                  color: Colors.black,
+              ),
+              const VerticalDivider(
+                color: Colors.transparent,
+              ),
+              Expanded(
+                child: Text(
+                  shoulder.toNoDotZeroNumString(),
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: _tableFontSize),
                 ),
-                Expanded(
-                  child: Text(
-                    chest.toNoDotZeroNumString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: _tableFontSize),
-                  ),
+              ),
+              const VerticalDivider(
+                color: Colors.transparent,
+              ),
+              Expanded(
+                child: Text(
+                  chest.toNoDotZeroNumString(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: _tableFontSize),
                 ),
-                const VerticalDivider(
-                  color: Colors.black,
+              ),
+              const VerticalDivider(
+                color: Colors.transparent,
+              ),
+              Expanded(
+                child: Text(
+                  sleeve.toNoDotZeroNumString(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: _tableFontSize),
                 ),
-                Expanded(
-                  child: Text(
-                    sleeve.toNoDotZeroNumString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: _tableFontSize),
-                  ),
-                ),
-                const SizedBox(width: 7.5,),
-              ],
-            ),
+              ),
+              const SizedBox(width: 7.5,),
+            ],
           ),
         ),
       ],

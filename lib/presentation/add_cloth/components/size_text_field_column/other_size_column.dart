@@ -41,13 +41,15 @@ class OtherSizeColumn implements SizeColumn {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             const AddCancelButton(),
-            ClothSaveButton(onPressed: (){
-              viewModel.addOther(
+            ClothSaveButton(onPressed: () async {
+              await viewModel.addOther(
                 categoryId: categoryId,
                 name: _nameTextController.text,
                 details: _detailTextController.text,
               );
-              context.pop();
+              if (context.mounted) {
+                context.pop();
+              }
             }),
           ],
         );

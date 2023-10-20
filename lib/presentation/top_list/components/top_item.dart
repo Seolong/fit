@@ -1,15 +1,19 @@
+import 'package:fit/presentation/global_components/cloth_table_row_content.dart';
 import 'package:fit/presentation/top_list/top_list_view_model.dart';
 import 'package:fit/util/string_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/model/cloth/top.dart';
+import '../../../util/colors.dart';
+import '../../global_components/trash_can_button.dart';
 
 class TopItem extends StatelessWidget {
   static const double _tablePadding = 4;
-  static const double _tableFontSize = 12;
+  static const double _tableFontSize = 14;
 
   final Top top;
+
   /// 테이블 열 색 구분용
   final int index;
   final VoidCallback onTap;
@@ -26,7 +30,7 @@ class TopItem extends StatelessWidget {
     required this.onTap,
     required this.onLongPress,
     Key? key,
-  }) : super(key: key){
+  }) : super(key: key) {
     name = top.name;
     total = top.totalLength;
     shoulder = top.shoulderWidth;
@@ -38,29 +42,13 @@ class TopItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GestureDetector(
-          onTap: () {
-            context.read<TopListViewModel>().deleteTop(top);
-          },
-          child: const SizedBox(
-            width: 60,
-            height: 60,
-            child: Icon(
-              Icons.delete,
-              size: 36,
-              color: Colors.red,
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: onTap,
-          onLongPress: onLongPress,
-          child: AnimatedContainer(
-            height: 60,
-            color: index % 2 == 0 ? Colors.white : Colors.grey[100],
-            duration: const Duration(milliseconds: 500),
-            transform: Matrix4.translationValues(
-                context.read<TopListViewModel>().isLongPressed ? 65 : 0, 0, 0),
+        TrashCanButton(onTap: () {
+          context.read<TopListViewModel>().deleteTop(top);
+        }),
+        ClothTableRowContent(
+            onTap: onTap,
+            onLongPress: onLongPress,
+            isLongPressed: context.read<TopListViewModel>().isLongPressed,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -69,10 +57,12 @@ class TopItem extends StatelessWidget {
                     child: Text(
                       name,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: _tableFontSize),
+                      style: const TextStyle(fontSize: _tableFontSize,
+                          fontWeight: FontWeight.w700,
+                          color: CustomColor.mainBlue),
                     )),
                 const VerticalDivider(
-                  color: Colors.black,
+                  color: Colors.transparent,
                 ),
                 Expanded(
                   child: Padding(
@@ -85,7 +75,7 @@ class TopItem extends StatelessWidget {
                   ),
                 ),
                 const VerticalDivider(
-                  color: Colors.black,
+                  color: Colors.transparent,
                 ),
                 Expanded(
                   child: Text(
@@ -96,7 +86,7 @@ class TopItem extends StatelessWidget {
                   ),
                 ),
                 const VerticalDivider(
-                  color: Colors.black,
+                  color: Colors.transparent,
                 ),
                 Expanded(
                   child: Text(
@@ -106,7 +96,7 @@ class TopItem extends StatelessWidget {
                   ),
                 ),
                 const VerticalDivider(
-                  color: Colors.black,
+                  color: Colors.transparent,
                 ),
                 Expanded(
                   child: Text(
@@ -115,11 +105,11 @@ class TopItem extends StatelessWidget {
                     style: const TextStyle(fontSize: _tableFontSize),
                   ),
                 ),
-                const SizedBox(width: 7.5,),
+                const SizedBox(
+                  width: 7.5,
+                ),
               ],
-            ),
-          ),
-        ),
+            )),
       ],
     );
   }
