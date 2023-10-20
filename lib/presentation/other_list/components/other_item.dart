@@ -1,4 +1,7 @@
+import 'package:fit/presentation/global_components/cloth_table_row_content.dart';
+import 'package:fit/presentation/global_components/trash_can_button.dart';
 import 'package:fit/presentation/other_list/other_list_view_model.dart';
+import 'package:fit/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,11 +9,10 @@ import '../../../domain/model/cloth/other.dart';
 
 class OtherItem extends StatelessWidget {
   static const double _tablePadding = 4;
-  static const double _tableFontSize = 12;
+  static const double _tableFontSize = 14;
 
   final Other other;
-  /// 테이블 열 색 구분용
-  final int index;
+
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
   late final String name;
@@ -18,11 +20,10 @@ class OtherItem extends StatelessWidget {
 
   OtherItem({
     required this.other,
-    required this.index,
     required this.onTap,
     required this.onLongPress,
     Key? key,
-  }) : super(key: key){
+  }) : super(key: key) {
     name = other.name;
     details = other.details;
   }
@@ -31,29 +32,13 @@ class OtherItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GestureDetector(
-          onTap: () {
-            context.read<OtherListViewModel>().deleteOther(other);
-          },
-          child: const SizedBox(
-            width: 60,
-            height: 60,
-            child: Icon(
-              Icons.delete,
-              size: 36,
-              color: Colors.red,
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: onTap,
-          onLongPress: onLongPress,
-          child: AnimatedContainer(
-            height: 60,
-            color: index % 2 == 0 ? Colors.white : Colors.grey[100],
-            duration: const Duration(milliseconds: 500),
-            transform: Matrix4.translationValues(
-                context.read<OtherListViewModel>().isLongPressed ? 65 : 0, 0, 0),
+        TrashCanButton(onTap: () {
+          context.read<OtherListViewModel>().deleteOther(other);
+        }),
+        ClothTableRowContent(
+            onTap: onTap,
+            onLongPress: onLongPress,
+            isLongPressed: context.read<OtherListViewModel>().isLongPressed,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -62,11 +47,11 @@ class OtherItem extends StatelessWidget {
                     child: Text(
                       name,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: _tableFontSize),
+                      style: const TextStyle(
+                          fontSize: _tableFontSize,
+                          fontWeight: FontWeight.w700,
+                          color: CustomColor.mainBlue),
                     )),
-                const VerticalDivider(
-                  color: Colors.black,
-                ),
                 Expanded(
                   flex: 3,
                   child: Padding(
@@ -78,11 +63,11 @@ class OtherItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 7.5,),
+                const SizedBox(
+                  width: 7.5,
+                ),
               ],
-            ),
-          ),
-        ),
+            )),
       ],
     );
   }

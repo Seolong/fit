@@ -7,4 +7,12 @@ class CustomColor {
 
   static const Color mainGreen = Color.fromARGB(255, 45, 215, 193);
   static const Color mainBlue = Color.fromARGB(255, 102, 197, 229);
+  static const Color skyBlue = Color.fromARGB(255, 147, 217, 235);
+}
+
+class CustomLinearGradient {
+  static const LinearGradient mainGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [CustomColor.mainGreen, CustomColor.mainBlue]);
 }

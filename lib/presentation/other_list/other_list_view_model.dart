@@ -39,17 +39,18 @@ class OtherListViewModel with ChangeNotifier {
   }
 
   OtherListViewModel(
-      this.getNewOtherIdUseCase,
-      this.insertOtherUseCase,
-      this.deleteOtherUseCase,
-      this.updateOtherUseCase,
-      this.getAllOthersUseCase,
-      this.getClothCategoryByIdUseCase,
-      );
+    this.getNewOtherIdUseCase,
+    this.insertOtherUseCase,
+    this.deleteOtherUseCase,
+    this.updateOtherUseCase,
+    this.getAllOthersUseCase,
+    this.getClothCategoryByIdUseCase,
+  );
 
   Future<void> loadOthers(int categoryId) async {
     var allOthers = await getAllOthersUseCase();
     others = allOthers.where((e) => e.categoryId == categoryId).toList();
+    others.sort((a, b) => a.order.compareTo(b.order));
 
     notifyListeners();
   }
@@ -94,27 +95,30 @@ class OtherListViewModel with ChangeNotifier {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    int newOrder = others[newIndex].order;
-    if (oldIndex > newIndex) {
-      for (int i = newIndex; i < oldIndex; i++) {
-        await updateOtherUseCase(
-            others[i].copyWith(order: others[i + 1].order));
-      }
-    } else if (oldIndex < newIndex) {
-      for (int i = newIndex; i > oldIndex; i--) {
-        await updateOtherUseCase(
-            others[i].copyWith(order: others[i - 1].order));
-      }
-    } else{
-      return;
-    }
-    await updateOtherUseCase(
-        others[oldIndex].copyWith(order: newOrder));
 
     var item = others.removeAt(oldIndex);
     others.insert(newIndex, item);
 
     notifyListeners();
+
+    if (oldIndex > newIndex) {
+      // 옮겨진 놈의 예전 순서
+      int oldOrderOfMovedItem = others[newIndex].order;
+      for (int i = newIndex; i < oldIndex; i++) {
+        await updateOtherUseCase(
+            others[i].copyWith(order: others[i + 1].order));
+      }
+      await updateOtherUseCase(others[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else if (oldIndex < newIndex) {
+      int oldOrderOfMovedItem = others[newIndex].order;
+      for(int i = newIndex; i>oldIndex; i--){
+        await updateOtherUseCase(
+            others[i].copyWith(order: others[i - 1].order));
+      }
+      await updateOtherUseCase(others[oldIndex].copyWith(order: oldOrderOfMovedItem));
+    } else {
+      return;
+    }
   }
 
   Future<String> getCategoryTitle(int id) async {

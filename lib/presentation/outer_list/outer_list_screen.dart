@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../global_components/top_snack_bar.dart';
+import '../global_components/delete_mode_snack_bar.dart';
 import 'compoenets/add_outer_dialog.dart';
 import 'compoenets/outer_item.dart';
 
@@ -99,7 +99,7 @@ class OuterListScreen extends StatelessWidget {
               ),
             ),
             Consumer<OuterListViewModel>(
-              builder: (context, provider, _) => TopSnackBar(
+              builder: (context, provider, _) => DeleteModeSnackBar(
                 onTap: provider.isLongPressed
                     ? () {
                   provider.isLongPressed = false;
@@ -107,7 +107,7 @@ class OuterListScreen extends StatelessWidget {
                     : null,
                 height: !provider.isLongPressed ? 0 : SizeValue.appBarHeight,
                 transform: Matrix4.translationValues(
-                    0, provider.isLongPressed ? 0 : -SizeValue.appBarHeight, 0),
+                    0, provider.isLongPressed ? 0 : SizeValue.appBarHeight, 0),
                 text: '삭제 모드 해제',
                 textColor:
                 provider.isLongPressed ? Colors.black : Colors.transparent,

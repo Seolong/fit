@@ -48,8 +48,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Pretendard",
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Colors.black,
+          backgroundColor: CustomColor.mainGreen,
           iconSize: 48,
+          elevation: 3.5,
         ),
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(

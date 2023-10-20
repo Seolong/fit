@@ -1,7 +1,7 @@
 import 'package:fit/di/di_setup.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
-import 'package:fit/presentation/global_components/top_snack_bar.dart';
+import 'package:fit/presentation/global_components/delete_mode_snack_bar.dart';
 import 'package:fit/util/size_value.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -100,7 +100,7 @@ class BottomListScreen extends StatelessWidget {
               ),
             ),
             Consumer<BottomListViewModel>(
-              builder: (context, provider, _) => TopSnackBar(
+              builder: (context, provider, _) => DeleteModeSnackBar(
                 onTap: provider.isLongPressed
                     ? () {
                         provider.isLongPressed = false;
@@ -108,7 +108,7 @@ class BottomListScreen extends StatelessWidget {
                     : null,
                 height: !provider.isLongPressed ? 0 : SizeValue.appBarHeight,
                 transform: Matrix4.translationValues(
-                    0, provider.isLongPressed ? 0 : -SizeValue.appBarHeight, 0),
+                    0, provider.isLongPressed ? 0 : SizeValue.appBarHeight, 0),
                 text: '삭제 모드 해제',
                 textColor:
                     provider.isLongPressed ? Colors.black : Colors.transparent,

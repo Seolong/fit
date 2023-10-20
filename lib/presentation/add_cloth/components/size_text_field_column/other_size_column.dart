@@ -1,15 +1,16 @@
 import 'package:fit/di/di_setup.dart';
+import 'package:fit/presentation/add_cloth/components/size_text_field_column/add_cancel_button.dart';
+import 'package:fit/presentation/add_cloth/components/size_text_field_column/cloth_save_button.dart';
 import 'package:fit/presentation/add_cloth/components/size_text_field_column/size_column.dart';
 import 'package:fit/presentation/add_cloth/components/size_text_field_column/size_text_field.dart';
 import 'package:fit/presentation/add_cloth/components/size_text_field_column/view_model/other_size_column_view_model.dart';
-import 'package:fit/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class OtherSizeColumn implements SizeColumn {
-  final TextEditingController nameTextController = TextEditingController();
-  final TextEditingController detailTextController = TextEditingController();
+  final TextEditingController _nameTextController = TextEditingController();
+  final TextEditingController _detailTextController = TextEditingController();
 
   @override
   Widget buildListView(BuildContext context) {
@@ -19,11 +20,11 @@ class OtherSizeColumn implements SizeColumn {
       children: [
         SizeTextField(
           title: '이름',
-          textEditingController: nameTextController,
+          textEditingController: _nameTextController,
         ),
         SizeTextField(
           title: '세부사항',
-          textEditingController: detailTextController,
+          textEditingController: _detailTextController,
           isLast: true,
         ),
       ],
@@ -39,37 +40,15 @@ class OtherSizeColumn implements SizeColumn {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            TextButton(
-              onPressed: () {
-                context.pop();
-              },
-              child: const Text(
-                '취소',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                viewModel.addOther(
-                  categoryId: categoryId,
-                  name: nameTextController.text,
-                  details: detailTextController.text,
-                );
-                context.pop();
-              },
-              child: const Text(
-                '저장',
-                style: TextStyle(
-                  color: CustomColor.mainBlue,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
+            const AddCancelButton(),
+            ClothSaveButton(onPressed: (){
+              viewModel.addOther(
+                categoryId: categoryId,
+                name: _nameTextController.text,
+                details: _detailTextController.text,
+              );
+              context.pop();
+            }),
           ],
         );
       },

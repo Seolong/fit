@@ -1,24 +1,29 @@
+import 'dart:ui';
+
 import 'package:fit/di/di_setup.dart';
+import 'package:fit/presentation/global_components/gradient_app_bar.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/other_list/components/add_other_dialog.dart';
 import 'package:fit/presentation/other_list/components/other_item.dart';
 import 'package:fit/presentation/other_list/other_list_view_model.dart';
 import 'package:fit/routes/app_routes.dart';
+import 'package:fit/util/colors.dart';
 import 'package:fit/util/size_value.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../global_components/top_snack_bar.dart';
+import '../global_components/delete_mode_snack_bar.dart';
 
 class OtherListScreen extends StatelessWidget {
   const OtherListScreen({Key? key, required this.categoryId}) : super(key: key);
 
   final int categoryId;
   static const double _tablePadding = 4;
-  static const double _tableFontSize = 12;
+  static const double _tableFontSize = 16;
+  static const Color _tableTextColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -33,54 +38,13 @@ class OtherListScreen extends StatelessWidget {
               resizeToAvoidBottomInset: false,
               floatingActionButton: AddFAB(
                 onPressed: () async {
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (_) => AddOtherDialog(
-                  //     otherListViewModel: viewModel,
-                  //     categoryId: categoryId,
-                  //   ),
-                  // );
-                  final String categoryTitle = await viewModel.getCategoryTitle(categoryId);
-                  context.push('${AppRoutes.addClothScreen}/$categoryId/${ClothType.other.name}/$categoryTitle');
+                  final String categoryTitle =
+                      await viewModel.getCategoryTitle(categoryId);
+                  if (context.mounted) {
+                    context.push(
+                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.other.name}/$categoryTitle');
+                  }
                 },
-              ),
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    context.pop();
-                  },
-                ),
-                title: FutureBuilder<String>(
-                  future: context
-                      .read<OtherListViewModel>()
-                      .getCategoryTitle(categoryId),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(snapshot.data!);
-                    } else {
-                      return const Text('');
-                    }
-                  },
-                ),
-                actions: [
-                  Consumer<OtherListViewModel>(
-                    builder: (context, provider, _) {
-                      return SwapButton(
-                        onTap: () {
-                          provider.enableReorder = !provider.enableReorder;
-                        },
-                        reorder: provider.enableReorder,
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
               ),
               body: Consumer<OtherListViewModel>(
                 builder: (context, provider, _) => Padding(
@@ -88,7 +52,38 @@ class OtherListScreen extends StatelessWidget {
                       bottom: MediaQuery.of(context).padding.bottom),
                   child: Column(
                     children: [
-                      _getTableHeader(),
+                      GradientAppBar(
+                        center: FutureBuilder<String>(
+                          future: context
+                              .read<OtherListViewModel>()
+                              .getCategoryTitle(categoryId),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              );
+                            } else {
+                              return const Text('');
+                            }
+                          },
+                        ),
+                        end: Consumer<OtherListViewModel>(
+                          builder: (context, provider, _) {
+                            return SwapButton(
+                              onTap: () {
+                                provider.enableReorder =
+                                    !provider.enableReorder;
+                              },
+                              reorder: provider.enableReorder,
+                            );
+                          },
+                        ),
+                      ),
+                      _createTableHeader(),
                       Flexible(
                         child: ReorderableListView(
                           buildDefaultDragHandles: provider.enableReorder,
@@ -103,7 +98,7 @@ class OtherListScreen extends StatelessWidget {
               ),
             ),
             Consumer<OtherListViewModel>(
-              builder: (context, provider, _) => TopSnackBar(
+              builder: (context, provider, _) => DeleteModeSnackBar(
                 onTap: provider.isLongPressed
                     ? () {
                         provider.isLongPressed = false;
@@ -111,7 +106,7 @@ class OtherListScreen extends StatelessWidget {
                     : null,
                 height: !provider.isLongPressed ? 0 : SizeValue.appBarHeight,
                 transform: Matrix4.translationValues(
-                    0, provider.isLongPressed ? 0 : -SizeValue.appBarHeight, 0),
+                    0, provider.isLongPressed ? 0 : SizeValue.appBarHeight, 0),
                 text: '삭제 모드 해제',
                 textColor:
                     provider.isLongPressed ? Colors.black : Colors.transparent,
@@ -132,7 +127,6 @@ class OtherListScreen extends StatelessWidget {
         OtherItem(
           key: ValueKey(i),
           other: viewModel.others[i],
-          index: i,
           onTap: () {
             showDialog(
               context: context,
@@ -156,39 +150,65 @@ class OtherListScreen extends StatelessWidget {
     return otherItemList;
   }
 
-  Container _getTableHeader() {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: const Border(bottom: BorderSide(width: 0.5))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          Expanded(
-              flex: 2,
-              child: Text(
-                '이름',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
-              )),
-          VerticalDivider(
-            color: Colors.black,
+  Widget _createTableHeader() {
+    return Stack(
+      children: [
+        Container(
+          height: 60,
+          decoration: const BoxDecoration(
+            color: CustomColor.skyBlue,
           ),
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.all(_tablePadding),
-              child: Text(
-                '세부사항',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: _tableFontSize),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                  flex: 2,
+                  child: Text(
+                    '이름',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: _tableFontSize,
+                        color: _tableTextColor,
+                        fontWeight: FontWeight.bold),
+                  )),
+              VerticalDivider(
+                color: Colors.white,
+                thickness: 1.5,
+                indent: 18,
+                endIndent: 18,
               ),
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: EdgeInsets.all(_tablePadding),
+                  child: Text(
+                    '세부사항',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: _tableFontSize,
+                        color: _tableTextColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 7.5,
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+            child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+            child: Container(
+              height: 10,
+              width: double.infinity,
+              color: Colors.black.withOpacity(0),
             ),
           ),
-          SizedBox(width: 7.5,),
-        ],
-      ),
+        ))
+      ],
     );
   }
 }
