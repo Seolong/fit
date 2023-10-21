@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../global_components/delete_mode_snack_bar.dart';
+import '../global_components/swap_snack_bar.dart';
 
 class OtherListScreen extends StatelessWidget {
   const OtherListScreen({Key? key, required this.categoryId}) : super(key: key);
@@ -74,6 +75,8 @@ class OtherListScreen extends StatelessWidget {
                               onTap: () {
                                 provider.enableReorder =
                                     !provider.enableReorder;
+                                SwapSnackBar.showSnackBar(
+                                    context, provider.enableReorder);
                               },
                               reorder: provider.enableReorder,
                             );

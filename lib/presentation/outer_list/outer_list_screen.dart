@@ -12,6 +12,7 @@ import '../../routes/app_routes.dart';
 import '../../util/type/cloth_type.dart';
 import '../global_components/delete_mode_snack_bar.dart';
 import '../global_components/gradient_app_bar.dart';
+import '../global_components/swap_snack_bar.dart';
 import 'compoenets/add_outer_dialog.dart';
 import 'compoenets/outer_item.dart';
 
@@ -74,6 +75,8 @@ class OuterListScreen extends StatelessWidget {
                               onTap: () {
                                 provider.enableReorder =
                                     !provider.enableReorder;
+                                SwapSnackBar.showSnackBar(
+                                    context, provider.enableReorder);
                               },
                               reorder: provider.enableReorder,
                             );

@@ -1,23 +1,24 @@
 import 'package:fit/presentation/global_components/gradient_widget.dart';
 import 'package:fit/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ToClothCategoryRouteButton extends StatefulWidget {
+class ToRouteButton extends StatefulWidget {
   final String name;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
+  final Widget? center;
 
-  const ToClothCategoryRouteButton(
-      {Key? key, required this.name, required this.onTap})
+  const ToRouteButton(
+      {Key? key, required this.name, required this.onTap, this.center, this.onLongPress})
       : super(key: key);
 
   @override
-  State<ToClothCategoryRouteButton> createState() =>
-      _ToClothCategoryRouteButtonState();
+  State<ToRouteButton> createState() =>
+      _ToRouteButtonState();
 }
 
-class _ToClothCategoryRouteButtonState
-    extends State<ToClothCategoryRouteButton> {
+class _ToRouteButtonState
+    extends State<ToRouteButton> {
   final double _borderRadius = 10;
   Gradient mainGradient = const LinearGradient(
     colors: <Color>[
@@ -76,6 +77,19 @@ class _ToClothCategoryRouteButtonState
           iconGradient = mainGradient;
         });
       },
+      onLongPress: widget.onLongPress,
+      onLongPressEnd: widget.onLongPress != null ? (_) {
+        setState(() {
+          buttonGradient = subGradient;
+          iconGradient = mainGradient;
+        });
+      }: null,
+      onLongPressCancel: widget.onLongPress != null ? () {
+        setState(() {
+          buttonGradient = subGradient;
+          iconGradient = mainGradient;
+        });
+      }: null,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_borderRadius),
@@ -94,8 +108,8 @@ class _ToClothCategoryRouteButtonState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              GradientWidget(
-                widget: Icon(
+              widget.center ?? GradientWidget(
+                widget: const Icon(
                   Icons.access_time_filled,
                   size: 50,
                   color: Colors.white,
@@ -126,32 +140,3 @@ class _ToClothCategoryRouteButtonState
     );
   }
 }
-
-// Ink(
-// decoration: BoxDecoration(
-// gradient: const LinearGradient(
-// begin: Alignment.topLeft,
-// end: Alignment.bottomRight,
-// colors: [
-// CustomColor.lightBlue,
-// CustomColor.deepBlue,
-// ],
-// ),
-// borderRadius: BorderRadius.circular(_borderRadius)),
-// height: 100,
-// width: 100,
-// child: InkWell(
-// borderRadius: BorderRadius.circular(_borderRadius),
-// onTap: onTap,
-// child: Center(
-// child: Text(
-// name,
-// style: const TextStyle(
-// fontSize: 26,
-// color: Colors.white,
-// fontWeight: FontWeight.bold,
-// ),
-// ),
-// ),
-// ),
-// );

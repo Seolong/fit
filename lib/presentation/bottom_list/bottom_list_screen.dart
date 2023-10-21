@@ -3,6 +3,7 @@ import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/presentation/global_components/cloth_table_header.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/global_components/delete_mode_snack_bar.dart';
+import 'package:fit/presentation/global_components/swap_snack_bar.dart';
 import 'package:fit/util/size_value.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +17,6 @@ import 'components/add_bottom_dialog.dart';
 import 'components/bottom_item.dart';
 
 class BottomListScreen extends StatelessWidget {
-
   const BottomListScreen({Key? key, required this.categoryId})
       : super(key: key);
 
@@ -38,7 +38,7 @@ class BottomListScreen extends StatelessWidget {
               floatingActionButton: AddFAB(
                 onPressed: () async {
                   final String categoryTitle =
-                  await viewModel.getCategoryTitle(categoryId);
+                      await viewModel.getCategoryTitle(categoryId);
                   if (context.mounted) {
                     context.push(
                         '${AppRoutes.addClothScreen}/$categoryId/${ClothType.bottom.name}/$categoryTitle');
@@ -75,7 +75,9 @@ class BottomListScreen extends StatelessWidget {
                             return SwapButton(
                               onTap: () {
                                 provider.enableReorder =
-                                !provider.enableReorder;
+                                    !provider.enableReorder;
+                                SwapSnackBar.showSnackBar(
+                                    context, provider.enableReorder);
                               },
                               reorder: provider.enableReorder,
                             );
@@ -156,11 +158,12 @@ class BottomListScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
-              flex: 3,
-              child: ClothTableHeaderText(
-                fontSize: _tableFontSize,
-                text: '이름',
-              ),),
+            flex: 3,
+            child: ClothTableHeaderText(
+              fontSize: _tableFontSize,
+              text: '이름',
+            ),
+          ),
           ClothTableHeaderDivider(),
           Expanded(
             child: Padding(
@@ -199,7 +202,9 @@ class BottomListScreen extends StatelessWidget {
               text: '밑단',
             ),
           ),
-          SizedBox(width: 7.5,),
+          SizedBox(
+            width: 7.5,
+          ),
         ],
       ),
     );

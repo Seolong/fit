@@ -1,8 +1,9 @@
 import 'package:fit/domain/model/category/cloth_category.dart';
 import 'package:fit/presentation/first_category/components/add_category_dialog.dart';
-import 'package:fit/presentation/first_category/components/to_cloth_list_screen_route_button.dart';
 import 'package:fit/presentation/first_category/first_category_view_model.dart';
 import 'package:fit/presentation/global_components/add_fab.dart';
+import 'package:fit/presentation/global_components/gradient_app_bar.dart';
+import 'package:fit/presentation/home/components/to_route_button.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,7 @@ import 'package:reorderables/reorderables.dart';
 
 import '../../di/di_setup.dart';
 import '../global_components/swap_button.dart';
+import '../global_components/swap_snack_bar.dart';
 
 class FirstCategoryScreen extends StatelessWidget {
   const FirstCategoryScreen({Key? key, required this.clothType})
@@ -45,56 +47,53 @@ class FirstCategoryScreen extends StatelessWidget {
                     );
                   });
             }),
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  context.pop();
-                },
-              ),
-              title: Text(
-                toUpperCaseOnlyFirstLetter(clothType.name),
-              ),
-              actions: [
-                Consumer<FirstCategoryViewModel>(
-                  builder: (context, provider, _) {
-                    return SwapButton(
-                      onTap: () {
-                        provider.enableReorder = !provider.enableReorder;
-                      },
-                      reorder: provider.enableReorder,
-                    );
-                  },
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-              ],
-            ),
             body: Consumer<FirstCategoryViewModel>(
               builder: (context, provider, child) => SizedBox.expand(
                 child: Padding(
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).padding.bottom),
-                  child: ReorderableWrap(
-                    buildDraggableFeedback: (BuildContext context,
-                            BoxConstraints constraints, Widget child) =>
-                        Material(
-                      elevation: 6.0,
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.zero,
-                      child: child,
-                    ),
-                    padding: const EdgeInsets.all(30),
-                    alignment: WrapAlignment.spaceBetween,
-                    runSpacing: 30,
-                    enableReorder: provider.enableReorder,
-                    onReorder: (oldIndex, newIndex) =>
-                        viewModel.reorderClothCategory(oldIndex, newIndex),
-                    children: _getRouteButtons(context, viewModel),
+                  child: Column(
+                    children: [
+                      GradientAppBar(
+                        center: Text(
+                          toUpperCaseOnlyFirstLetter(clothType.name),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        end: Consumer<FirstCategoryViewModel>(
+                          builder: (context, provider, _) {
+                            return SwapButton(
+                              onTap: () {
+                                provider.enableReorder =
+                                    !provider.enableReorder;
+                                SwapSnackBar.showSnackBar(
+                                    context, provider.enableReorder);
+                              },
+                              reorder: provider.enableReorder,
+                            );
+                          },
+                        ),
+                      ),
+                      ReorderableWrap(
+                        buildDraggableFeedback: (BuildContext context,
+                                BoxConstraints constraints, Widget child) =>
+                            Material(
+                          elevation: 6.0,
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.zero,
+                          child: child,
+                        ),
+                        padding: const EdgeInsets.all(30),
+                        spacing: 20,
+                        runSpacing: 20,
+                        enableReorder: provider.enableReorder,
+                        onReorder: (oldIndex, newIndex) =>
+                            viewModel.reorderClothCategory(oldIndex, newIndex),
+                        children: _getRouteButtons(context, viewModel),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -103,45 +102,46 @@ class FirstCategoryScreen extends StatelessWidget {
         });
   }
 
-  List<ToClothListScreenRouteButton> _getRouteButtons(
+  List<Widget> _getRouteButtons(
       BuildContext context, FirstCategoryViewModel viewModel) {
-    List<ToClothListScreenRouteButton> buttonList = [];
+    List<Widget> buttonList = [];
 
     for (var category in viewModel.categories) {
       buttonList.add(
-        ToClothListScreenRouteButton(
-          onTap: () {
-            int categoryId = category.id;
-            switch (clothType) {
-              case ClothType.top:
-                context.push('${AppRoutes.topList}/$categoryId');
-                break;
-              case ClothType.bottom:
-                context.push('${AppRoutes.bottomList}/$categoryId');
-                break;
-              case ClothType.outer:
-                context.push('${AppRoutes.outerList}/$categoryId');
-                break;
-              case ClothType.other:
-                context.push('${AppRoutes.otherList}/$categoryId');
-                break;
-            }
-          },
-          onLongPress: !viewModel.enableReorder
-              ? () {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return _getLongPressDialog(context, viewModel, category);
-                    },
-                  );
-                }
-              : null,
-          child: Text(
-            category.title,
-            style: const TextStyle(
-              fontSize: 20,
-            ),
+        SizedBox(
+          width: 125,
+          height: 125,
+          child: ToRouteButton(
+            onTap: () {
+              int categoryId = category.id;
+              switch (clothType) {
+                case ClothType.top:
+                  context.push('${AppRoutes.topList}/$categoryId');
+                  break;
+                case ClothType.bottom:
+                  context.push('${AppRoutes.bottomList}/$categoryId');
+                  break;
+                case ClothType.outer:
+                  context.push('${AppRoutes.outerList}/$categoryId');
+                  break;
+                case ClothType.other:
+                  context.push('${AppRoutes.otherList}/$categoryId');
+                  break;
+              }
+            },
+            onLongPress: !viewModel.enableReorder
+                ? () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return _getLongPressDialog(
+                            context, viewModel, category);
+                      },
+                    );
+                  }
+                : null,
+            name: category.title,
+            center: const SizedBox.shrink(),
           ),
         ),
       );

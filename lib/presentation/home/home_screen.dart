@@ -1,5 +1,5 @@
 import 'package:fit/presentation/home/components/search_text_field.dart';
-import 'package:fit/presentation/home/components/to_cloth_category_route_button.dart';
+import 'package:fit/presentation/home/components/to_route_button.dart';
 import 'package:fit/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,26 +13,26 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<ToClothCategoryRouteButton> buttonList = [
-      ToClothCategoryRouteButton(
+    final List<ToRouteButton> buttonList = [
+      ToRouteButton(
         name: 'Top',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.top.name}');
         },
       ),
-      ToClothCategoryRouteButton(
+      ToRouteButton(
         name: 'Bottom',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.bottom.name}');
         },
       ),
-      ToClothCategoryRouteButton(
+      ToRouteButton(
         name: 'Outer',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.outer.name}');
         },
       ),
-      ToClothCategoryRouteButton(
+      ToRouteButton(
         name: 'Other',
         onTap: () {
           context.push('${AppRoutes.first}/${ClothType.other.name}');

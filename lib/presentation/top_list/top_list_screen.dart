@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../../routes/app_routes.dart';
 import '../../util/type/cloth_type.dart';
 import '../global_components/gradient_app_bar.dart';
+import '../global_components/swap_snack_bar.dart';
 
 class TopListScreen extends StatelessWidget {
   const TopListScreen({Key? key, required this.categoryId}) : super(key: key);
@@ -36,7 +37,7 @@ class TopListScreen extends StatelessWidget {
               floatingActionButton: AddFAB(
                 onPressed: () async {
                   final String categoryTitle =
-                  await viewModel.getCategoryTitle(categoryId);
+                      await viewModel.getCategoryTitle(categoryId);
                   if (context.mounted) {
                     context.push(
                         '${AppRoutes.addClothScreen}/$categoryId/${ClothType.top.name}/$categoryTitle');
@@ -73,7 +74,9 @@ class TopListScreen extends StatelessWidget {
                             return SwapButton(
                               onTap: () {
                                 provider.enableReorder =
-                                !provider.enableReorder;
+                                    !provider.enableReorder;
+                                SwapSnackBar.showSnackBar(
+                                    context, provider.enableReorder);
                               },
                               reorder: provider.enableReorder,
                             );
@@ -148,15 +151,17 @@ class TopListScreen extends StatelessWidget {
   }
 
   Widget _getTableHeader() {
-    return const ClothTableHeader(child: Row(
+    return const ClothTableHeader(
+        child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Expanded(
-            flex: 3,
-            child: ClothTableHeaderText(
-              fontSize: _tableFontSize,
-              text: '이름',
-            ),),
+          flex: 3,
+          child: ClothTableHeaderText(
+            fontSize: _tableFontSize,
+            text: '이름',
+          ),
+        ),
         ClothTableHeaderDivider(),
         Expanded(
           child: Padding(
