@@ -7,11 +7,13 @@ class SizeTextField extends StatefulWidget {
     required this.title,
     required this.textEditingController,
     this.isLast = false,
+    this.inputType = TextInputType.text,
   }) : super(key: key);
 
   final String title;
   final TextEditingController textEditingController;
   final bool isLast;
+  final TextInputType inputType;
 
   @override
   State<SizeTextField> createState() => _SizeTextFieldState();
@@ -44,6 +46,7 @@ class _SizeTextFieldState extends State<SizeTextField> {
           child: TextField(
             controller: widget.textEditingController,
             textInputAction: widget.isLast ? TextInputAction.done: TextInputAction.next,
+            keyboardType: widget.inputType,
             decoration: const InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -61,4 +64,6 @@ class _SizeTextFieldState extends State<SizeTextField> {
       ],
     );
   }
+
+
 }

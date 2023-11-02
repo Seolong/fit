@@ -6,4 +6,5 @@ class AppRoutes {
   static const outerList = '/outerList';
   static const otherList = '/otherList';
   static const addClothScreen = '/addClothScreen';
+  static const clothDetailScreen = '/clothDetailScreen';
 }

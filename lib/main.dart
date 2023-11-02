@@ -7,6 +7,7 @@ import 'package:fit/di/di_setup.dart';
 import 'package:fit/domain/model/util/count_set.dart';
 import 'package:fit/presentation/add_cloth/add_cloth_screen.dart';
 import 'package:fit/presentation/bottom_list/bottom_list_screen.dart';
+import 'package:fit/presentation/cloth_detail/cloth_detail_screen.dart';
 import 'package:fit/presentation/first_category/first_category_screen.dart';
 import 'package:fit/presentation/home/home_screen.dart';
 import 'package:fit/presentation/other_list/other_list_screen.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'FIT',
       theme: ThemeData(
+        useMaterial3: true,
         fontFamily: "Pretendard",
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: CustomColor.mainGreen,
@@ -115,14 +117,26 @@ class MyApp extends StatelessWidget {
         },
       ),
       GoRoute(
-          path: '${AppRoutes.addClothScreen}/:categoryId/:clothType/:categoryTitle',
-          builder: (BuildContext context, GoRouterState state) {
-            return AddClothScreen(
-              categoryId: int.parse(state.pathParameters['categoryId']!),
-              clothType: state.pathParameters['clothType']!.toClothType(),
-              categoryTitle: state.pathParameters['categoryTitle']!,
-            );
-          })
+        path:
+            '${AppRoutes.addClothScreen}/:categoryId/:clothType/:categoryTitle',
+        builder: (BuildContext context, GoRouterState state) {
+          return AddClothScreen(
+            categoryId: int.parse(state.pathParameters['categoryId']!),
+            clothType: state.pathParameters['clothType']!.toClothType(),
+            categoryTitle: state.pathParameters['categoryTitle']!,
+          );
+        },
+      ),
+      GoRoute(
+        path:
+        '${AppRoutes.clothDetailScreen}/:clothType/:id',
+        builder: (BuildContext context, GoRouterState state) {
+          return ClothDetailScreen(
+            clothType: state.pathParameters['clothType']!.toClothType(),
+            id: int.parse(state.pathParameters['id']!),
+          );
+        },
+      ),
     ],
   );
 }

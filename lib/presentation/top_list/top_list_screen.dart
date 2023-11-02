@@ -3,7 +3,6 @@ import 'package:fit/presentation/global_components/add_fab.dart';
 import 'package:fit/presentation/global_components/cloth_table_header.dart';
 import 'package:fit/presentation/global_components/swap_button.dart';
 import 'package:fit/presentation/global_components/delete_mode_snack_bar.dart';
-import 'package:fit/presentation/top_list/components/add_top_dialog.dart';
 import 'package:fit/presentation/top_list/components/top_item.dart';
 import 'package:fit/presentation/top_list/top_list_view_model.dart';
 import 'package:fit/util/size_value.dart';
@@ -128,15 +127,17 @@ class TopListScreen extends StatelessWidget {
           top: viewModel.tops[i],
           index: i,
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (_) => AddTopDialog(
-                topListViewModel: viewModel,
-                categoryId: categoryId,
-                isEditMode: true,
-                top: viewModel.tops[i],
-              ),
-            );
+            // showDialog(
+            //   context: context,
+            //   builder: (_) => AddTopDialog(
+            //     topListViewModel: viewModel,
+            //     categoryId: categoryId,
+            //     isEditMode: true,
+            //     top: viewModel.tops[i],
+            //   ),
+            // );
+            context.push(
+                '${AppRoutes.clothDetailScreen}/${ClothType.top.name}/${viewModel.tops[i].id}');
           },
           onLongPress: !viewModel.enableReorder
               ? () {

@@ -33,18 +33,22 @@ class OuterSizeColumn implements SizeColumn {
         SizeTextField(
           title: '총장',
           textEditingController: _totalLengthTextController,
+          inputType: TextInputType.number,
         ),
         SizeTextField(
           title: '어깨너비',
           textEditingController: _shoulderLengthTextController,
+          inputType: TextInputType.number,
         ),
         SizeTextField(
           title: '가슴단면',
           textEditingController: _chestLengthTextController,
+          inputType: TextInputType.number,
         ),
         SizeTextField(
           title: '소매길이',
           textEditingController: _sleeveLengthTextController,
+          inputType: TextInputType.number,
           isLast: true,
         ),
       ],
@@ -65,10 +69,10 @@ class OuterSizeColumn implements SizeColumn {
               await viewModel.addOuter(
                 categoryId: categoryId,
                 name: _nameTextController.text,
-                totalLength: double.parse(_totalLengthTextController.text),
-                chestWidth: double.parse(_chestLengthTextController.text),
-                sleeveLength: double.parse(_sleeveLengthTextController.text),
-                shoulderWidth: double.parse(_shoulderLengthTextController.text),
+                totalLength: _totalLengthTextController.text,
+                chestWidth: _chestLengthTextController.text,
+                sleeveLength: _sleeveLengthTextController.text,
+                shoulderWidth: _shoulderLengthTextController.text,
               );
               if (context.mounted) {
                 context.pop();

@@ -38,7 +38,7 @@ class AddClothScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
             child: SizedBox(
-              height: 100,
+              height: 50,
               child: sizeColumn.buildButtonRow(context, categoryId),
             ),
           ),

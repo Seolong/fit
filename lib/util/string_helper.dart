@@ -14,3 +14,12 @@ extension StringHelper on double {
     return '$this';
   }
 }
+
+extension DoubleHelper on String {
+  double convertTextToDouble() {
+    if(isEmpty) {
+      return 0;
+    }
+    return double.parse(this);
+  }
+}

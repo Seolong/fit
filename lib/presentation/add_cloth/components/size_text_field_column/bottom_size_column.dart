@@ -31,22 +31,27 @@ class BottomSizeColumn implements SizeColumn {
         SizeTextField(
           title: '총장',
           textEditingController: _totalLengthTextController,
+          inputType: TextInputType.number,
         ),
         SizeTextField(
           title: '허리단면',
           textEditingController: _waistTextController,
+          inputType: TextInputType.number,
         ),
         SizeTextField(
           title: '허벅지단면',
           textEditingController: _thighTextController,
+          inputType: TextInputType.number,
         ),
         SizeTextField(
           title: '밑위',
           textEditingController: _legOpeningTextController,
+          inputType: TextInputType.number,
         ),
         SizeTextField(
           title: '밑단',
           textEditingController: _riseTextController,
+          inputType: TextInputType.number,
           isLast: true,
         ),
       ],
@@ -67,11 +72,11 @@ class BottomSizeColumn implements SizeColumn {
               await viewModel.addBottom(
                 categoryId: categoryId,
                 name: _nameTextController.text,
-                totalLength: double.parse(_totalLengthTextController.text),
-                waist: double.parse(_waistTextController.text),
-                thigh: double.parse(_thighTextController.text),
-                legOpening: double.parse(_legOpeningTextController.text),
-                rise: double.parse(_riseTextController.text)
+                totalLength: _totalLengthTextController.text,
+                waist: _waistTextController.text,
+                thigh: _thighTextController.text,
+                legOpening: _legOpeningTextController.text,
+                rise: _riseTextController.text
               );
               if (context.mounted) {
                 context.pop();

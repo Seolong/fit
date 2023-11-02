@@ -22,32 +22,42 @@ class TopSizeColumn implements SizeColumn {
 
   @override
   Widget buildListView(BuildContext context) {
-    return ListView(
-      physics: const RangeMaintainingScrollPhysics(),
-      padding: EdgeInsets.zero,
-      children: [
-        SizeTextField(
-          title: '이름',
-          textEditingController: _nameTextController,
-        ),
-        SizeTextField(
-          title: '총장',
-          textEditingController: _totalLengthTextController,
-        ),
-        SizeTextField(
-          title: '어깨너비',
-          textEditingController: _shoulderLengthTextController,
-        ),
-        SizeTextField(
-          title: '가슴단면',
-          textEditingController: _chestLengthTextController,
-        ),
-        SizeTextField(
-          title: '소매길이',
-          textEditingController: _sleeveLengthTextController,
-          isLast: true,
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => getIt<TopSizeColumnViewModel>(),
+      builder: (context, __) {
+        final viewModel = context.read<TopSizeColumnViewModel>();
+        return ListView(
+          physics: const RangeMaintainingScrollPhysics(),
+          padding: EdgeInsets.zero,
+          children: [
+            SizeTextField(
+              title: '이름',
+              textEditingController: _nameTextController,
+            ),
+            SizeTextField(
+              title: '총장',
+              textEditingController: _totalLengthTextController,
+              inputType: TextInputType.number,
+            ),
+            SizeTextField(
+              title: '어깨너비',
+              textEditingController: _shoulderLengthTextController,
+              inputType: TextInputType.number,
+            ),
+            SizeTextField(
+              title: '가슴단면',
+              textEditingController: _chestLengthTextController,
+              inputType: TextInputType.number,
+            ),
+            SizeTextField(
+              title: '소매길이',
+              textEditingController: _sleeveLengthTextController,
+              inputType: TextInputType.number,
+              isLast: true,
+            ),
+          ],
+        );
+      }
     );
   }
 
@@ -65,10 +75,10 @@ class TopSizeColumn implements SizeColumn {
               await viewModel.addTop(
                 categoryId: categoryId,
                 name: _nameTextController.text,
-                totalLength: double.parse(_totalLengthTextController.text),
-                chestWidth: double.parse(_chestLengthTextController.text),
-                sleeveLength: double.parse(_sleeveLengthTextController.text),
-                shoulderWidth: double.parse(_shoulderLengthTextController.text),
+                totalLength: _totalLengthTextController.text,
+                chestWidth: _chestLengthTextController.text,
+                sleeveLength: _sleeveLengthTextController.text,
+                shoulderWidth: _shoulderLengthTextController.text,
               );
               if (context.mounted) {
                 context.pop();
