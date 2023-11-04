@@ -8,18 +8,44 @@ class SizeTextField extends StatefulWidget {
     required this.textEditingController,
     this.isLast = false,
     this.inputType = TextInputType.text,
+    this.initialValue,
   }) : super(key: key);
 
   final String title;
   final TextEditingController textEditingController;
   final bool isLast;
   final TextInputType inputType;
+  final String? initialValue;
 
   @override
   State<SizeTextField> createState() => _SizeTextFieldState();
 }
 
 class _SizeTextFieldState extends State<SizeTextField> {
+  Widget? suffixIcon;
+  late Widget clearButton;
+
+  @override
+  void initState() {
+    super.initState();
+    clearButton = IconButton(
+      icon: const Icon(
+        Icons.clear,
+        color: Colors.grey,
+      ),
+      onPressed: () {
+        widget.textEditingController.clear();
+        setState(() {
+          suffixIcon = null;
+        });
+      },
+    );
+    if (widget.initialValue != null) {
+      widget.textEditingController.text = widget.initialValue!;
+      suffixIcon = clearButton;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,25 +71,37 @@ class _SizeTextFieldState extends State<SizeTextField> {
           ]),
           child: TextField(
             controller: widget.textEditingController,
-            textInputAction: widget.isLast ? TextInputAction.done: TextInputAction.next,
+            textInputAction:
+                widget.isLast ? TextInputAction.done : TextInputAction.next,
             keyboardType: widget.inputType,
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(width: 1, color: CustomColor.mainBlue),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(width: 1, color: Colors.white),
-              ),
-            ),
+            onChanged: (text) {
+              if (text.isNotEmpty) {
+                if (suffixIcon == null) {
+                  setState(() {
+                    suffixIcon = clearButton;
+                  });
+                }
+              } else {
+                setState(() {
+                  suffixIcon = null;
+                });
+              }
+            },
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(width: 1, color: CustomColor.mainBlue),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(width: 1, color: Colors.white),
+                ),
+                suffixIcon: suffixIcon),
           ),
         ),
       ],
     );
   }
-
-
 }

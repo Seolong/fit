@@ -3,8 +3,8 @@ import 'package:fit/util/type/cloth_type.dart';
 import 'package:flutter/material.dart';
 
 abstract class DetailContent {
-  Widget buildDetailContent(BuildContext context, int id);
-
+  Widget buildNameText(BuildContext context, int id);
+  Widget buildSizeContent(BuildContext context, int id);
   Widget buildFabColumn(BuildContext context, int id);
 
   factory DetailContent(ClothType type) {

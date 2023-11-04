@@ -10,15 +10,17 @@ class AddClothScreen extends StatelessWidget {
     required this.categoryId,
     required this.clothType,
     required this.categoryTitle,
+    this.clothId,
   }) : super(key: key);
 
   final int categoryId;
   final ClothType clothType;
   final String categoryTitle;
+  final int? clothId;
 
   @override
   Widget build(BuildContext context) {
-    SizeColumn sizeColumn = SizeColumn(clothType);
+    SizeColumn sizeColumn = SizeColumn(clothType, clothId);
     return Scaffold(
       body: Column(
         children: [

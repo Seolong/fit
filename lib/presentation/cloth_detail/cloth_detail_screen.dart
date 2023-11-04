@@ -53,7 +53,7 @@ class ClothDetailScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _getNameText('아주 멋진 상의'),
+                  detailContent.buildNameText(context, id),
                   Container(
                     margin: const EdgeInsets.all(10),
                     width: 24,
@@ -65,20 +65,13 @@ class ClothDetailScreen extends StatelessWidget {
                   ),
                   _getClothIcon(),
                   _getClassificationText(clothType),
-                  detailContent.buildDetailContent(context, id),
+                  detailContent.buildSizeContent(context, id),
                 ],
               ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _getNameText(String name) {
-    return Text(
-      name,
-      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
     );
   }
 

@@ -3,18 +3,40 @@ import 'package:fit/presentation/cloth_detail/components/delete_dialog.dart';
 import 'package:fit/presentation/cloth_detail/components/detail_content/detail_content.dart';
 import 'package:fit/presentation/cloth_detail/components/detail_content/view_model/top_detail_view_model.dart';
 import 'package:fit/presentation/cloth_detail/components/fab_column.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../di/di_setup.dart';
+import '../../../../routes/app_routes.dart';
+import '../../../../util/type/cloth_type.dart';
 import '../detail_row.dart';
 import '../item_column.dart';
 
 class TopDetailContent implements DetailContent {
   @override
-  Widget buildDetailContent(BuildContext context, int id) {
+  Widget buildNameText(BuildContext context, int id) {
+    return ChangeNotifierProvider(
+        create: (_) => getIt<TopDetailViewModel>(),
+        builder: (context, __) {
+          final viewModel = context.watch<TopDetailViewModel>();
+          return FutureBuilder<Top>(
+              future: viewModel.getTop(id),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    snapshot.data!.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              });
+        });
+  }
+
+  @override
+  Widget buildSizeContent(BuildContext context, int id) {
     return ChangeNotifierProvider(
         create: (_) => getIt<TopDetailViewModel>(),
         builder: (context, __) {
@@ -64,8 +86,14 @@ class TopDetailContent implements DetailContent {
               }
             }
           },
-          editPressed: () {
+          editPressed: () async {
             //TODO
+            final Top top = await viewModel.getTop(id);
+            if(context.mounted) {
+              context.push(
+                  '${AppRoutes.addClothScreen}/${top.categoryId}/${ClothType.top
+                      .name}/${top.name} 수정/$id');
+            }
           },
         );
       },

@@ -118,18 +118,20 @@ class MyApp extends StatelessWidget {
       ),
       GoRoute(
         path:
-            '${AppRoutes.addClothScreen}/:categoryId/:clothType/:categoryTitle',
+            '${AppRoutes.addClothScreen}/:categoryId/:clothType/:categoryTitle/:clothId',
         builder: (BuildContext context, GoRouterState state) {
           return AddClothScreen(
             categoryId: int.parse(state.pathParameters['categoryId']!),
             clothType: state.pathParameters['clothType']!.toClothType(),
             categoryTitle: state.pathParameters['categoryTitle']!,
+            clothId: state.pathParameters['clothId'] != 'null'
+                ? int.parse(state.pathParameters['clothId']!)
+                : null,
           );
         },
       ),
       GoRoute(
-        path:
-        '${AppRoutes.clothDetailScreen}/:clothType/:id',
+        path: '${AppRoutes.clothDetailScreen}/:clothType/:id',
         builder: (BuildContext context, GoRouterState state) {
           return ClothDetailScreen(
             clothType: state.pathParameters['clothType']!.toClothType(),

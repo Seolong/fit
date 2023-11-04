@@ -21,6 +21,7 @@ class TopDetailViewModel with ChangeNotifier{
   Future<void> deleteTopById(int id) async {
     Top top = await getTopByIdUseCase(id);
     await deleteTopUseCase(top);
+    notifyListeners();
   }
 
   Future<void> updateTop(Top top) async {

@@ -40,7 +40,7 @@ class OuterListScreen extends StatelessWidget {
                       await viewModel.getCategoryTitle(categoryId);
                   if (context.mounted) {
                     context.push(
-                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.outer.name}/$categoryTitle');
+                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.outer.name}/$categoryTitle/null');
                   }
                 },
               ),

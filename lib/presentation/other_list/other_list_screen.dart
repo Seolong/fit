@@ -40,7 +40,7 @@ class OtherListScreen extends StatelessWidget {
                       await viewModel.getCategoryTitle(categoryId);
                   if (context.mounted) {
                     context.push(
-                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.other.name}/$categoryTitle');
+                        '${AppRoutes.addClothScreen}/$categoryId/${ClothType.other.name}/$categoryTitle/null');
                   }
                 },
               ),

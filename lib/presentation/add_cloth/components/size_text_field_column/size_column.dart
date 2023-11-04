@@ -10,10 +10,10 @@ abstract class SizeColumn {
   Widget buildListView(BuildContext context);
   Widget buildButtonRow(BuildContext context, int categoryId);
 
-  factory SizeColumn(ClothType type) {
+  factory SizeColumn(ClothType type, int? clothId) {
     switch (type){
       case ClothType.top:
-        return TopSizeColumn();
+        return TopSizeColumn(clothId);
       case ClothType.bottom:
         return BottomSizeColumn();
       case ClothType.outer:
